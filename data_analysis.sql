@@ -1,13 +1,19 @@
+SET myvars.start_date TO '2021-02-01 00:00:00.000000';
+SET myvars.end_date TO '2021-05-01 00:00:00.000000';
+
+
 -- 12 372 zapasu
 select *
 from matches
-where start_time_utc >= '2021-02-01 00:00:00.000000' and start_time_utc < '2021-05-01 00:00:00.000000';
+where start_time_utc >= current_setting('myvars.start_date')::timestamptz
+  and start_time_utc < current_setting('myvars.end_date')::timestamptz;
 
 -- 3 642 zapasu
 select distinct match_id
 from match_course
          join matches m on m.id = match_course.match_id
-where start_time_utc >= '2021-02-01 00:00:00.000000' and start_time_utc < '2021-05-01 00:00:00.000000';
+where start_time_utc >= current_setting('myvars.start_date')::timestamptz
+  and start_time_utc < current_setting('myvars.end_date')::timestamptz;
 
 -- kompletni zapasy (Grand Slam zvlast)
 
