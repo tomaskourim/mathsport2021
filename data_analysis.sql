@@ -37,7 +37,7 @@ WHERE winning_sets = 2
 ORDER BY match_id;
 
 
--- 3 438 matches with at least 2 sets played (i.e. at least 1 possible bet)
+-- 3 438 matches with at least 2 sets played and recorded (i.e. at least 1 possible bet)
 SELECT *
 FROM (
          SELECT match_id, COUNT(*) AS sets_played
@@ -49,4 +49,37 @@ WHERE sets_played >= 2
 ORDER BY match_id;
 
 
--- sety, na ktere lze sazet
+-- 8 310 sets with complete information (TODO maybe there are some matches with odds for set1 and set3, but not set2)
+SELECT home,
+       away,
+       set_number,
+       odd1,
+       odd2,
+       result,
+       start_time_utc
+FROM (
+         SELECT *,
+                CASE
+                    WHEN match_part = 'set1'
+                        THEN 1
+                    WHEN match_part = 'set2'
+                        THEN 2
+                    WHEN match_part = 'set3'
+                        THEN 3
+                    WHEN match_part = 'set4'
+                        THEN 4
+                    WHEN match_part = 'set5'
+                        THEN 5
+                    END AS set_number_odds
+         FROM odds) AS odds_enhanced
+         INNER JOIN
+     (SELECT *, ma.id AS matchid
+      FROM matches_bookmaker mb
+               JOIN matches ma ON mb.match_id = ma.id
+               JOIN match_course mc ON mb.match_id = mc.match_id) AS match_course_enhanced
+     ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND
+        odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND
+        odds_enhanced.set_number_odds = match_course_enhanced.set_number
+WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date')::timestamptz
+  AND start_time_utc < CURRENT_SETTING('myvars.end_date')::timestamptz
+ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number;
