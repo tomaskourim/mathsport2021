@@ -37,6 +37,16 @@ WHERE winning_sets = 2
 ORDER BY match_id;
 
 
--- zapasy, kde mam alespon 2 sety (i.e. jedna teoreticka sazka)
+-- 3 438 matches with at least 2 sets played (i.e. at least 1 possible bet)
+SELECT *
+FROM (
+         SELECT match_id, COUNT(*) AS sets_played
+         FROM match_course
+         WHERE utc_time_recorded >= CURRENT_SETTING('myvars.start_date')::timestamptz
+           AND utc_time_recorded < CURRENT_SETTING('myvars.end_date')::timestamptz
+         GROUP BY match_id) AS all_sets_played
+WHERE sets_played >= 2
+ORDER BY match_id;
+
 
 -- sety, na ktere lze sazet
