@@ -51,9 +51,9 @@ def find_fair_odds_parameter(training_set: pd.DataFrame) -> Optional[float]:
 
 
 def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
-    query = "SELECT home,     away,     set_number,     odd1,     odd2,     case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             WHEN match_part = 'set2'                 THEN 2             WHEN match_part = 'set3'                 THEN 3             WHEN match_part = 'set4'                 THEN 4             WHEN match_part = 'set5'                 THEN 5             END AS set_number_odds     FROM odds) AS odds_enhanced          INNER JOIN (SELECT *, ma.id AS matchid  FROM matches_bookmaker mb           JOIN matches ma ON mb.match_id = ma.id           JOIN match_course mc ON mb.match_id = mc.match_id) AS match_course_enhanced ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND     odds_enhanced.set_number_odds = match_course_enhanced.set_number " \
+    query = "SELECT home,     away,     set_number,     odd1,     odd2,     case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             WHEN match_part = 'set2'                 THEN 2             WHEN match_part = 'set3'                 THEN 3             WHEN match_part = 'set4'                 THEN 4             WHEN match_part = 'set5'                 THEN 5             END AS set_number_odds     FROM odds) AS odds_enhanced          INNER JOIN (SELECT *, ma.id AS matchid  FROM matches_bookmaker mb           JOIN matches ma ON mb.match_id = ma.id           JOIN match_course mc ON mb.match_id = mc.match_id join tournament t on ma.tournament_id = t.id) AS match_course_enhanced ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND     odds_enhanced.set_number_odds = match_course_enhanced.set_number " \
             "WHERE start_time_utc >= %s AND     " \
-            "start_time_utc < %s AND set_number = 1 ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number"
+            "start_time_utc < %s AND set_number = 1 and sex='women' and type='singles' ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number"
     column_names = ["home", "away", "set_number", "odd1", "odd2", "result", "start_time_utc"]
     return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=column_names)
 
@@ -91,9 +91,9 @@ def main():
     fair_odds_parameter = find_fair_odds_parameter(training_set)
     logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
 
-    training_set = transform_home_favorite(training_set)
-    fair_odds_parameter = find_fair_odds_parameter(training_set)
-    logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
+    # training_set = transform_home_favorite(training_set)
+    # fair_odds_parameter = find_fair_odds_parameter(training_set)
+    # logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
 
 
 if __name__ == '__main__':

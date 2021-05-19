@@ -112,7 +112,8 @@ FROM (
 (SELECT *, ma.id AS matchid
  FROM matches_bookmaker mb
           JOIN matches ma ON mb.match_id = ma.id
-          JOIN match_course mc ON mb.match_id = mc.match_id) AS match_course_enhanced
+          JOIN match_course mc ON mb.match_id = mc.match_id
+          join tournament t on ma.tournament_id = t.id) AS match_course_enhanced
 ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND
     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND
     odds_enhanced.set_number_odds = match_course_enhanced.set_number
