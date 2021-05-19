@@ -6,7 +6,7 @@ from typing import Optional
 import psycopg2
 
 
-def config(filename: str = '../database.ini', section: str = 'postgresql') -> dict:
+def config(filename: str = './database.ini', section: str = 'postgresql') -> dict:
     # create a parser
     parser = ConfigParser()
     # read config file

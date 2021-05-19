@@ -471,11 +471,11 @@ and
 \end_inset
 
 such that 
-\begin_inset Formula $N(o,0)=n_{2}(o)$
+\begin_inset Formula $\mu(o,0)=n_{2}(o)$
 \end_inset
 
  and 
-\begin_inset Formula $N(o,2)=n_{1}(o)$
+\begin_inset Formula $\mu(o,2)=n_{1}(o)$
 \end_inset
 
 .
@@ -492,7 +492,69 @@ To obtain reasonable estimation of the model parameter
 \end_inset
 
 .
- This was done using the maximal likelihood estimate and the training set.
+ This was done using the maximal likelihood estimate method and the training
+ set.
+ Bookmaker's odds for the first set and the actual result of the first set
+ were used.
+ The likelihood function is defined as 
+\begin_inset Formula 
+\[
+L=\prod_{i=1}^{N}(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $N$
+\end_inset
+
+ is the number of matches in the training dataset, 
+\begin_inset Formula $o_{i}$
+\end_inset
+
+ is the bookmaker's odds for the first set in the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ match and 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is the result of the first set in the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ match, 
+\begin_inset Formula $x_{i}=1$
+\end_inset
+
+ if Player A won the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ set, 
+\begin_inset Formula $x_{i}=0$
+\end_inset
+
+ otherwise.
+ or computational reasons the 
+\emph on
+log-likelihood 
+\emph default
+
+\begin_inset Formula $L_{l}=log(L)$
+\end_inset
+
+ was used, i.e.
+ the function 
+\begin_inset Formula 
+\[
+L_{l}=\sum_{i=1}^{N}log(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t))
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
