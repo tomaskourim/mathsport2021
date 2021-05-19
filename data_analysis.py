@@ -14,7 +14,7 @@ def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
     odds_probability_norm = sum(1 / odds)
     normalized_odds_probabilities = 1 / (odds * odds_probability_norm)
     odds_weights = (1 - normalized_odds_probabilities) + (
-            normalized_odds_probabilities - EVEN_ODDS_PROBABILITY) * fair_odds_parameter * 1 / EVEN_ODDS_PROBABILITY
+            normalized_odds_probabilities - EVEN_ODDS_PROBABILITY) * fair_odds_parameter
     probabilities = 1 / odds - odds_weights * (odds_probability_norm - 1)
 
     return probabilities
@@ -30,7 +30,8 @@ def log_likelihood_fair_odds_parameter(fair_odds_parameter: float, matches_data:
     for index, match_data in matches_data.iterrows():
         odds = np.array([match_data["odd1"], match_data["odd2"]])
         probabilities = get_fair_odds(odds, fair_odds_parameter)
-        if probabilities[0] + probabilities[1] != 1:
+        if probabilities[0] + probabilities[1] < 0.999999999999999 or \
+                probabilities[0] + probabilities[1] > 1.00000000000001:
             raise Exception("Probabilities do not sum to 1")
         result = match_data["result"]
         log_likelihood = log_likelihood + np.log(result * probabilities[0] + (1 - result) * (1 - probabilities[0]))
