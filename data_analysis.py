@@ -8,6 +8,7 @@ import scipy.optimize as opt
 from database_operations import execute_sql_postgres
 
 EVEN_ODDS_PROBABILITY = 0.5
+COLUMN_NAMES = ['home', 'away', 'set_number', 'odd1', 'odd2', 'result', 'start_time_utc']
 
 
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
@@ -36,14 +37,14 @@ def log_likelihood_fair_odds_parameter(fair_odds_parameter: float, matches_data:
         result = match_data["result"]
         log_likelihood = log_likelihood + np.log(result * probabilities[0] + (1 - result) * (1 - probabilities[0]))
 
-        return log_likelihood
+    return log_likelihood
 
 
 def find_fair_odds_parameter(training_set: pd.DataFrame) -> Optional[float]:
     opt_result = opt.minimize_scalar(negative_log_likelihood_fair_odds_parameter, bounds=(0, 2), method='bounded',
                                      args=training_set)
     if opt_result.success:
-        logging.info("Fitted successfully.")
+        logging.debug("Fitted successfully.")
         return opt_result.x
     else:
         return None
@@ -57,11 +58,40 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
     return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=column_names)
 
 
+def transform_home_favorite(matches_data: pd.DataFrame) -> pd.DataFrame:
+    transformed_matches = []
+    for _, match_data in matches_data.iterrows():
+        if match_data.odd1 <= match_data.odd2:
+            transformed_matches.append(list(match_data))
+        else:
+            transformed_matches.append(list(transform_home_favorite_single(match_data)))
+
+    transformed_matches = pd.DataFrame(transformed_matches, columns=COLUMN_NAMES)
+
+    return transformed_matches
+
+
+def transform_home_favorite_single(match_data: pd.Series) -> pd.Series:
+    transformed_data = pd.Series(index=COLUMN_NAMES)
+    transformed_data.home = match_data.away
+    transformed_data.away = match_data.home
+    transformed_data.set_number = match_data.set_number
+    transformed_data.odd1 = match_data.odd2
+    transformed_data.odd2 = match_data.odd1
+    transformed_data.result = 0 if match_data.result else 1
+    transformed_data.start_time_utc = match_data.start_time_utc
+
+    return transformed_data
+
+
 def main():
-    # prvni set s kurzy a vysledky
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
     training_set = get_first_set_data(start_date, end_date)
+    fair_odds_parameter = find_fair_odds_parameter(training_set)
+    logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
+
+    training_set = transform_home_favorite(training_set)
     fair_odds_parameter = find_fair_odds_parameter(training_set)
     logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
 
