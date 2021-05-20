@@ -99,7 +99,6 @@ Recently introduced random walk model showed its possible use in predicting
  tennis men Grand Slam tournaments outcomes.
  The model was then further examined in and its theoretical background was
  described in more detail.
-
 \end_layout
 
 \begin_layout Abstract
@@ -121,6 +120,10 @@ Possible improvements of the model are discussed with respect to the obtained
 
 \begin_layout Section
 Introduction
+\end_layout
+
+\begin_layout Standard
+Musim prepsat, zatim proste zkopirovano.
 \end_layout
 
 \begin_layout Standard
@@ -306,6 +309,10 @@ name "sec:Random-walk-with"
 
 \end_layout
 
+\begin_layout Subsection
+Application for tennis modelling
+\end_layout
+
 \begin_layout Section
 Data description
 \begin_inset CommandInset label
@@ -317,6 +324,47 @@ name "sec:Data-description"
 
 \end_layout
 
+\begin_layout Standard
+For the purpose of this paper an automatic data gathering tool was created.
+ This tool was continuously scraping data from tipsport.cz, the website of
+ the biggest Czech bookmaker, and saving provided odds for the winner of
+ the first set of each match and, if available, also the 
+\emph on
+in-play
+\emph default
+ odds for each set played.
+ The tool also stored the results of each particular set played.
+ The tool was developed using the Python programming language with the help
+ of Selenium framework.
+ PostgreSQL database deployed on Digital Ocean infrastructure was used for
+ storing data.
+ The tool was gathering data from February 2021 until the submission of
+ this paper (May 24th 2021).
+ Data from February till the end of April were used as a training dataset,
+ data from May as testing dataset.
+ Toghether there were 12 372 matches in the training dataset and XXX in
+ the testing dataset.
+ Complete information, i.e.
+ both odds and result, were available only for 3 365 matches (mostly because
+ the bookmaker did not provide 
+\emph on
+in-play
+\emph default
+ odds for the matches).
+ As the matches are played as 
+\emph on
+best-of-three
+\emph default
+ (or 
+\emph on
+best-of-five
+\emph default
+ in case od 2021 ATP Australian Open) there were XXX sets played where a
+ prediction could be made.
+ For the testing dataset the numbers are as follow XXX.
+ 
+\end_layout
+
 \begin_layout Section
 Optimal model selection
 \begin_inset CommandInset label
@@ -326,6 +374,220 @@ name "sec:Optimal-model-selection"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+As mentioned in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Random-walk-with"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, there are 4 basic variants of the model altogether - success punishing
+ or success rewarding with either one or two coefficients lambda.
+ The first step in tennis prediction is to select the proper model variant.
+\end_layout
+
+\begin_layout Subsection
+Starting probability selection
+\end_layout
+
+\begin_layout Standard
+The random walk with varying probabilities is a simple mode with only 2
+ parameters, starting probability 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ and coefficient 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ (possibly as 
+\begin_inset Formula $[\lambda_{1},\ \lambda_{2}]$
+\end_inset
+
+).
+ In tennis modelling, coefficient 
+\begin_inset Formula $p_{0}=p_{A}$
+\end_inset
+
+ means the probability that Player A will win the first set.
+ This probability (or its estimate) is implicitly given by the odds 
+\begin_inset Formula $o=[o_{A},\,o_{B}]$
+\end_inset
+
+ provided by bookmaker.
+ Roughly, 
+\begin_inset Formula $p_{A}\widetilde{=}\frac{1}{o_{A}}$
+\end_inset
+
+.
+ This estimate can be further refined.
+ First, for typical odds there holds that 
+\begin_inset Formula $\frac{1}{o_{A}}+\frac{1}{o_{B}}>1$
+\end_inset
+
+ (i.e., typically the bookmaker provides 
+\emph on
+subfair 
+\emph default
+odds with bookmaker's winning margin).
+ First step is thus the normalization of odds.
+ It turns out that the simple normalization, i.e.
+ 
+\begin_inset Formula $p_{A}=n_{1}(o)=\frac{\frac{1}{o_{A}}}{\frac{1}{o_{A}}+\frac{1}{o_{B}}}$
+\end_inset
+
+ does not provide reasonable results.
+ In fact, bookmakers margin is usually unevently distributed towards the
+ outsider.
+ Therefore, an alternative normalization function can be used:
+\begin_inset Formula 
+\[
+p_{A}=n_{2}(o)=\frac{1}{o_{A}}+\frac{o_{A}o_{B}-o_{A}-o_{B}}{o_{B}(o_{A}+o_{B})}.
+\]
+
+\end_inset
+
+This can be further improved by introducing a third normalization function
+ 
+\begin_inset Formula $N(o,t)$
+\end_inset
+
+, with a real parameter 
+\begin_inset Formula $t$
+\end_inset
+
+ linearly extrapolating 
+\begin_inset Formula $n_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $n_{2}$
+\end_inset
+
+such that 
+\begin_inset Formula $\mu(o,0)=n_{2}(o)$
+\end_inset
+
+ and 
+\begin_inset Formula $\mu(o,2)=n_{1}(o)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+To obtain reasonable estimation of the model parameter 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ from provided odds, the first step is to estimate parameter 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ This was done using the maximal likelihood estimate method and the training
+ set.
+ Bookmaker's odds for the first set and the actual result of the first set
+ were used.
+ The likelihood function is defined as 
+\begin_inset Formula 
+\[
+L=\prod_{i=1}^{N}(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $N$
+\end_inset
+
+ is the number of matches in the training dataset, 
+\begin_inset Formula $o_{i}$
+\end_inset
+
+ is the bookmaker's odds for the first set in the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ match and 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is the result of the first set in the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ match, 
+\begin_inset Formula $x_{i}=1$
+\end_inset
+
+ if Player A won the 
+\begin_inset Formula $i-th$
+\end_inset
+
+ set, 
+\begin_inset Formula $x_{i}=0$
+\end_inset
+
+ otherwise.
+ or computational reasons the 
+\emph on
+log-likelihood 
+\emph default
+
+\begin_inset Formula $L_{l}=log(L)$
+\end_inset
+
+ was used, i.e.
+ the function 
+\begin_inset Formula 
+\[
+L_{l}=\sum_{i=1}^{N}log(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)).
+\]
+
+\end_inset
+
+Numerical methods, namely the function 
+\emph on
+minimize_scalar
+\emph default
+ from the Python SciPy package, were used to obtain optimal value of parameter
+ 
+\begin_inset Formula $t=4.03e-06$
+\end_inset
+
+.
+ We can thus consider 
+\begin_inset Formula $t=0$
+\end_inset
+
+ and use function 
+\begin_inset Formula $n_{2}$
+\end_inset
+
+ for normalization (poznamka, pro zenske singly to vychazi 0.96).
+\end_layout
+
+\begin_layout Subsection
+Model selection
+\end_layout
+
+\begin_layout Standard
+Pro kazdy zapas mam dane p0.
+ Provedu 4 iterace, kde si fixuju model type.
+ Nasledne hledam optimalni lambda.
+ Nakonec vyhodnotim dle AIC ktery je nejlepsi.
+\end_layout
+
+\begin_layout Standard
+varianty pro skupiny zapasu
 \end_layout
 
 \begin_layout Section
@@ -373,8 +635,9 @@ https://github.com/tomaskourim/mathsport2021
 
 \end_inset
 
- together with a database containing all data that was used in this paper.
+.
  More results can be also obtained from the same repository.
+ The data used in this paper are available from the author upon request.
 \end_layout
 
 \begin_layout Standard
