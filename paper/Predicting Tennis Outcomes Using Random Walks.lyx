@@ -580,10 +580,44 @@ Model selection
 \end_layout
 
 \begin_layout Standard
-Pro kazdy zapas mam dane p0.
- Provedu 4 iterace, kde si fixuju model type.
- Nasledne hledam optimalni lambda.
- Nakonec vyhodnotim dle AIC ktery je nejlepsi.
+For each match with data for at least 2 sets available (i.e.
+ with at least 1 prediction opportunity), the starting set winning probability
+ was derived using the procedure and parameter from previous paragraph,
+ and used as parameter 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+.
+ Then, for each of the four model variants the optimal value of coefficient
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ was found again using the maximum log-likelihood estimate.
+ Finally, the Akaike Information Criterion 
+\begin_inset Formula $AIC=2k-2ln(L)$
+\end_inset
+
+, which helps to correctly identify models with smaller number of parameters,
+ was used.
+ Here 
+\begin_inset Formula $k$
+\end_inset
+
+ is the number of model parameters and 
+\begin_inset Formula $L$
+\end_inset
+
+ is the maximal likelihood.
+ This produces 
+\emph on
+succes rewarded with single lambda 
+\emph default
+as the optimal model, with 
+\begin_inset Formula $\lambda=0.826$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard

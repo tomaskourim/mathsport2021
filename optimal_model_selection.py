@@ -43,7 +43,7 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
     matchid = ""
     walk = []
     for index, set_data in matches_data.iterrows():
-        if matchid != set_data.matchid:
+        if matchid != set_data.matchid:  # TODO maybe there are some matches with odds for set1 and set3, but not set2
             matchid = set_data.matchid
             odds = np.array([set_data.odd1, set_data.odd2])
             probabilities = get_fair_odds(odds, fair_odds_parameter)
