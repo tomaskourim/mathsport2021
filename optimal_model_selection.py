@@ -2,10 +2,11 @@ from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
+import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
 from odds_to_probabilities import get_fair_odds_parameter, get_fair_odds
-from utils import get_logger, COLUMN_NAMES
+from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
@@ -51,12 +52,20 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
         else:
             walk.append(set_data.result)
     walks.append(walk)
-    walks.pop()
+    walks = walks[1:]
 
-    for index, walk in enumerate(walks):
-        if len(walk) == 1:
+    index = 0
+    while index < len(walks):
+        if len(walks[index]) < 0:
+            raise Exception("Walk length should not be less than 1")
+        elif len(walks[index]) == 1:
             del walks[index]
             del starting_probabilities[index]
+        else:
+            index = index + 1
+
+    if len(walks) != len(starting_probabilities):
+        raise Exception("There has to be the same number of walks as starting probabilities.")
 
     return walks, starting_probabilities
 
@@ -66,8 +75,11 @@ def main():
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
     matches_data = get_matches_data(start_date, end_date)
+
     # transform data
     walks, starting_probabilities = transform_data(matches_data)
+    logger.info(f"There are {len(walks)} walks available.")
+
     # get model estimate + parameters
     # repeat for subgroups
     logger.info("Done")
