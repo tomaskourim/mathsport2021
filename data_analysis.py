@@ -58,32 +58,6 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
     return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=column_names)
 
 
-def transform_home_favorite(matches_data: pd.DataFrame) -> pd.DataFrame:
-    transformed_matches = []
-    for _, match_data in matches_data.iterrows():
-        if match_data.odd1 <= match_data.odd2:
-            transformed_matches.append(list(match_data))
-        else:
-            transformed_matches.append(list(transform_home_favorite_single(match_data)))
-
-    transformed_matches = pd.DataFrame(transformed_matches, columns=COLUMN_NAMES)
-
-    return transformed_matches
-
-
-def transform_home_favorite_single(match_data: pd.Series) -> pd.Series:
-    transformed_data = pd.Series(index=COLUMN_NAMES)
-    transformed_data.home = match_data.away
-    transformed_data.away = match_data.home
-    transformed_data.set_number = match_data.set_number
-    transformed_data.odd1 = match_data.odd2
-    transformed_data.odd2 = match_data.odd1
-    transformed_data.result = 0 if match_data.result else 1
-    transformed_data.start_time_utc = match_data.start_time_utc
-
-    return transformed_data
-
-
 def main():
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
