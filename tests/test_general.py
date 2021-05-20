@@ -17,6 +17,14 @@ class GeneralTest(unittest.TestCase):
             self.assertEqual(computed_probabilities[0], probability_pairs[index][0])
             self.assertEqual(computed_probabilities[1], probability_pairs[index][1])
 
+        odds = np.array([2.65, 1.42])
+        parameters = [0]
+        probability_pairs = [[0.32423878955901275, 0.6757612104409872]]
+        for index, parameter in enumerate(parameters):
+            computed_probabilities = get_fair_odds(odds, parameter)
+            self.assertEqual(computed_probabilities[0], probability_pairs[index][0])
+            self.assertEqual(computed_probabilities[1], probability_pairs[index][1])
+
 
 if __name__ == '__main__':
     unittest.main()

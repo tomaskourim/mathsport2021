@@ -50,12 +50,12 @@ ORDER BY match_id;
 
 
 -- 8 310 sets with complete information (TODO maybe there are some matches with odds for set1 and set3, but not set2)
-SELECT home,
+SELECT matchid, home,
     away,
     set_number,
     odd1,
     odd2,
-    result,
+    case when result = 'home' then 1 else 0 end as result,
     start_time_utc
 FROM (
     SELECT *,
@@ -82,7 +82,7 @@ ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id A
     odds_enhanced.set_number_odds = match_course_enhanced.set_number
 WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date')::timestamptz AND
     start_time_utc < CURRENT_SETTING('myvars.end_date')::timestamptz
-ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number;
+ORDER BY start_time_utc, match_course_enhanced.matchid, match_course_enhanced.set_number;
 
 
 -- 3 642 first sets with complete information

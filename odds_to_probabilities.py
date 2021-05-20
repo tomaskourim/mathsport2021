@@ -6,10 +6,9 @@ import pandas as pd
 import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
-from utils import get_logger
+from utils import get_logger, COLUMN_NAMES
 
 EVEN_ODDS_PROBABILITY = 0.5
-COLUMN_NAMES = ['home', 'away', 'set_number', 'odd1', 'odd2', 'result', 'start_time_utc']
 
 
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
@@ -52,19 +51,39 @@ def find_fair_odds_parameter(training_set: pd.DataFrame) -> Optional[float]:
 
 
 def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
-    query = "SELECT home,     away,     set_number,     odd1,     odd2,     case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             WHEN match_part = 'set2'                 THEN 2             WHEN match_part = 'set3'                 THEN 3             WHEN match_part = 'set4'                 THEN 4             WHEN match_part = 'set5'                 THEN 5             END AS set_number_odds     FROM odds) AS odds_enhanced          INNER JOIN (SELECT *, ma.id AS matchid  FROM matches_bookmaker mb           JOIN matches ma ON mb.match_id = ma.id           JOIN match_course mc ON mb.match_id = mc.match_id join tournament t on ma.tournament_id = t.id) AS match_course_enhanced ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND     odds_enhanced.set_number_odds = match_course_enhanced.set_number " \
+    query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
+            "case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     " \
+            "SELECT *,         CASE             " \
+            "WHEN match_part = 'set1'                 THEN 1             " \
+            "WHEN match_part = 'set2'                 THEN 2             " \
+            "WHEN match_part = 'set3'                 THEN 3             " \
+            "WHEN match_part = 'set4'                 THEN 4             " \
+            "WHEN match_part = 'set5'                 THEN 5             " \
+            "END AS set_number_odds     FROM odds) AS odds_enhanced          " \
+            "INNER JOIN (SELECT *, ma.id AS matchid  FROM matches_bookmaker mb           " \
+            "JOIN matches ma ON mb.match_id = ma.id           " \
+            "JOIN match_course mc ON mb.match_id = mc.match_id join tournament t on ma.tournament_id = t.id) " \
+            "AS match_course_enhanced ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id " \
+            "AND     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id " \
+            "AND     odds_enhanced.set_number_odds = match_course_enhanced.set_number " \
             "WHERE start_time_utc >= %s AND     " \
-            "start_time_utc < %s AND set_number = 1 ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number"
+            "start_time_utc < %s AND set_number = 1 " \
+            "ORDER BY start_time_utc, match_course_enhanced.matchid, match_course_enhanced.set_number"
     # and sex='women' and type='singles'
-    column_names = ["home", "away", "set_number", "odd1", "odd2", "result", "start_time_utc"]
-    return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=column_names)
+
+    return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=COLUMN_NAMES)
 
 
-def main():
+def get_fair_odds_parameter() -> float:
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
     training_set = get_first_set_data(start_date, end_date)
-    fair_odds_parameter = find_fair_odds_parameter(training_set)
+    return find_fair_odds_parameter(training_set)
+    # return 0
+
+
+def main():
+    fair_odds_parameter = get_fair_odds_parameter()
     logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
 
 

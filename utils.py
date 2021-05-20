@@ -1,5 +1,9 @@
 import logging
 
+COLUMN_NAMES = ["matchid", "home", "away", "set_number", "odd1", "odd2", "result", "start_time_utc"]
+ERROR_VALUE = 'not_fitted'
+OPTIMIZATION_ALGORITHM = 'Nelder-Mead'
+
 
 def get_logger() -> logging.Logger:
     # Create a custom logger
