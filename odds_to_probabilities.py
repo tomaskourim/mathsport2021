@@ -75,11 +75,11 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
 
 
 def get_fair_odds_parameter() -> float:
-    # start_date = '2021-02-01 00:00:00.000000'
-    # end_date = '2021-05-01 00:00:00.000000'
-    # training_set = get_first_set_data(start_date, end_date)
-    # return find_fair_odds_parameter(training_set)
-    return 0
+    start_date = '2021-02-01 00:00:00.000000'
+    end_date = '2021-05-01 00:00:00.000000'
+    training_set = get_first_set_data(start_date, end_date)
+    return find_fair_odds_parameter(training_set)
+    # return 0
 
 
 def main():
