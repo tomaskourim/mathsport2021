@@ -7,11 +7,12 @@ import scipy.optimize as opt
 from database_operations import execute_sql_postgres
 from odds_to_probabilities import get_fair_odds_parameter, get_fair_odds
 from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
+from walk_operations import get_current_probability
 
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
     query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
-            "case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     " \
+            "case when result = 'home' then 1 else -1 end as result,     start_time_utc FROM (     " \
             "SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             " \
             "WHEN match_part = 'set2'                 THEN 2             " \
             "WHEN match_part = 'set3'                 THEN 3             " \
@@ -70,31 +71,6 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
     return walks, starting_probabilities
 
 
-def get_current_probability(c_lambdas: List[float], last_probability: float, step: int, walk_type: str) -> float:
-    """
-    Computes the transition probability for the next step according to the respective definition as in the paper.
-    :param c_lambdas:
-    :param last_probability:
-    :param step: as Ising variable
-    :param walk_type:
-    :return:
-    """
-    if step == '' or step == 0:  # at the beginning of the walk just return p0
-        return last_probability
-    if walk_type == 'success_punished':
-        return c_lambdas[0] * last_probability + (0.5 * (1 - c_lambdas[0]) * (1 - step))
-    elif walk_type == 'success_rewarded':
-        return (c_lambdas[0]) * last_probability + (0.5 * (1 - c_lambdas[0]) * (1 + step))
-    elif walk_type == 'success_punished_two_lambdas':
-        return 0.5 * (((1 + step) * c_lambdas[0]) * last_probability + (1 - step) * (
-                1 - (c_lambdas[1]) * (1 - last_probability)))
-    elif walk_type == 'success_rewarded_two_lambdas':
-        return 0.5 * (((1 - step) * c_lambdas[0]) * last_probability + ((1 + step) * (
-                1 - (c_lambdas[1]) * (1 - last_probability))))
-    else:
-        raise Exception(f'Unexpected walk type: {walk_type}')
-
-
 def get_single_walk_log_likelihood(log_likelihood: float, c_lambdas: List[float], starting_probability: float,
                                    walk: List[int], model_type: str, starting_index: int) -> float:
     current_probability = starting_probability
@@ -103,7 +79,7 @@ def get_single_walk_log_likelihood(log_likelihood: float, c_lambdas: List[float]
         if current_probability >= 1 or current_probability <= 0 or max(c_lambdas) >= 1 or min(c_lambdas) <= 0:
             return -1e20  # so that I dont get double overflow error
         log_likelihood = log_likelihood + np.log(
-            walk[i] * current_probability + (1 - walk[i]) * (1 - current_probability))
+            0.5 * ((1 + walk[i]) * current_probability + (1 - walk[i]) * (1 - current_probability)))
     return log_likelihood
 
 
@@ -111,7 +87,8 @@ def negative_log_likelihood_single_lambda(c_lambda: float, walks: List[List[int]
                                           model_type: str) -> float:
     log_likelihood = 0
     for starting_probability, walk in zip(starting_probabilities, walks):
-        log_likelihood = get_single_walk_log_likelihood(log_likelihood, [c_lambda], starting_probability, walk,
+        log_likelihood = get_single_walk_log_likelihood(log_likelihood, [c_lambda],
+                                                        starting_probability, walk,
                                                         model_type, starting_index=1)
     return -log_likelihood
 
@@ -121,7 +98,8 @@ def negative_log_likelihood_two_lambdas(c_lambdas: List[float], walks: List[List
                                         model_type: str) -> float:
     log_likelihood = 0
     for starting_probability, walk in zip(starting_probabilities, walks):
-        log_likelihood = get_single_walk_log_likelihood(log_likelihood, c_lambdas, starting_probability, walk,
+        log_likelihood = get_single_walk_log_likelihood(log_likelihood, c_lambdas,
+                                                        starting_probability, walk,
                                                         model_type, starting_index=1)
     return -log_likelihood
 
@@ -180,7 +158,7 @@ def get_model_estimate(walks: List[List[int]], starting_probabilities: List[floa
                                                            min_akaike)
 
     # two lambdas models
-    guess = np.repeat(0.5, 2)
+    guess = np.repeat(0.9, 2)
     model = 'success_punished_two_lambdas'
     min_akaike, result, current_model = find_akaike(guess, model, walks, starting_probabilities, result, current_model,
                                                     min_akaike)
@@ -204,6 +182,7 @@ def main():
 
     # get model estimate + parameters
     c_lambdas, model_type = get_model_estimate(walks, starting_probabilities)
+    logger.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
 
     # repeat for subgroups
     logger.info("Done")
