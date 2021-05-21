@@ -398,6 +398,13 @@ noprefix "false"
 
 \begin_layout Subsection
 Starting probability selection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Starting-probability-selection"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -581,6 +588,13 @@ minimize_scalar
 
 \begin_layout Subsection
 Model selection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Model-selection"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -640,6 +654,602 @@ name "sec:Model-application-for"
 \end_layout
 
 \begin_layout Standard
+To test the quality of the model, following experiment was performed.
+ The testing dataset consisted of matches played between May 1st 2021 and
+ May 20th 2021.
+ There were XXX matches with complete data available, i.e.
+ results of all sets played and bookmakers odds for that sets.
+ For each match in the dataset, first the starting probability was derived
+ using the procedure described in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Starting-probability-selection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ Then, it was iterated over the sets played, and for each set, the set winning
+ probability was computed using the 
+\emph on
+success rewarding 
+\emph default
+model and memory parameter 
+\begin_inset Formula $\lambda=0.826$
+\end_inset
+
+ as specified in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Model-selection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ Every time the odd provided by the bookmaker was high enough, a virtual
+ bet was made.
+ 
+\lang british
+Choosing the correct betting strategy is one of the key elements of successful
+ betting.
+ It depends on the underlying model, available bookmaker's odds, bankroll,
+ internal bookmaker's policies and many other parameters.
+ There exists a large number of possible approaches and the detailed description
+ of them is beyond the scope of this paper.
+ For testing purposes, there were three basic strategies tested.
+ First, the naive betting strategy, where simpy 1 unit was bet every time.
+ Then, the probability base strategy, where 
+\begin_inset Formula $p$
+\end_inset
+
+ (probability of winning) units was bet.
+ Finally the odds based strategy, where 
+\begin_inset Formula $\frac{1}{odds}$
+\end_inset
+
+ was bet.
+ The strategies differ in the expected wins and their variance.
+ The theoretical properties of the betting strategies can be observed in
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:strategies"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ with the special case where 
+\begin_inset Formula $p=\frac{1}{a}$
+\end_inset
+
+, i.e.
+ in case of fair odds 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+cite{ja2015ddny}
+\end_layout
+
+\end_inset
+
+.
+ besides the different betting amount strategies, it is also important to
+ choose when to bet.
+ The basic strategy is to bet always when 
+\begin_inset Formula $p>\frac{1}{odds}$
+\end_inset
+
+.
+ It turns out that it is more favourable to bet only when there is a margin
+ present, i.e.
+ when 
+\begin_inset Formula $p>\frac{1}{odds}\cdot m$
+\end_inset
+
+, where 
+\begin_inset Formula $m$
+\end_inset
+
+ is a margin parameter, 
+\begin_inset Formula $m>1.$
+\end_inset
+
+ For 
+\begin_inset Formula $m=1.2$
+\end_inset
+
+, i.e.
+ 20% margin, there are 58 virtual bets made and a significant profit can
+ be achieved.
+ In termz of return of investment, the naive berring yields profit 123%,
+ probability based betting 86% and odds based betting 100% profit.
+ The development of the portfolio balance can be seen in Figure XXX.
+\end_layout
+
+\begin_layout Standard
+
+\lang british
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\lang british
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="6">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+Strategy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+Bet
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $E(w)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $E(w|p=\frac{1}{a})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $Var(w)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $Var(w|p=\frac{1}{a})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+Naive
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $pa-1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $pa^{2}(1-p)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $a(1-\frac{1}{a}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+Odds
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $\frac{1}{a}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $p-\frac{1}{a}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $p(1-p)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $\frac{1-\frac{1}{k}}{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+Prob.
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $p$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $p(pa-1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $p^{3}a^{2}(1-p)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $\frac{1-\frac{1}{k}}{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+General
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $u$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $u(pa-1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $u^{2}pa^{2}(1-p)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Formula $u^{2}a(1-\frac{1}{a})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang british
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:strategies"
+
+\end_inset
+
+Theoretical values of wins and variances for different betting strategies.
+ 
+\begin_inset Formula $p$
+\end_inset
+
+ is the probability of winning, 
+\begin_inset Formula $a$
+\end_inset
+
+ is the odds provided by bookmaker.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
