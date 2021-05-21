@@ -11,6 +11,8 @@ from utils import get_logger, COLUMN_NAMES
 EVEN_ODDS_PROBABILITY = 0.5
 
 
+logger = get_logger()
+
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
     odds_probability_norm = sum(1 / odds)
     normalized_odds_probabilities = 1 / (odds * odds_probability_norm)
@@ -88,5 +90,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logger = get_logger()
     main()

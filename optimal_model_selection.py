@@ -9,6 +9,8 @@ from optimal_fair_odds_parameter import get_fair_odds_parameter, get_fair_odds
 from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 from walk_operations import get_current_probability
 
+logger = get_logger()
+
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
     query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
@@ -178,7 +180,7 @@ def get_model_estimate(walks: List[List[int]], starting_probabilities: List[floa
     return result, current_model
 
 
-def get_optimal_model():
+def get_optimal_model() -> Tuple[List[float], str]:
     # get all data
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
@@ -200,5 +202,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logger = get_logger()
     main()
