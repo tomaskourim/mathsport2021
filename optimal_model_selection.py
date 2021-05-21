@@ -5,7 +5,7 @@ import pandas as pd
 import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
-from odds_to_probabilities import get_fair_odds_parameter, get_fair_odds
+from optimal_fair_odds_parameter import get_fair_odds_parameter, get_fair_odds
 from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 from walk_operations import get_current_probability
 
@@ -170,7 +170,7 @@ def get_model_estimate(walks: List[List[int]], starting_probabilities: List[floa
     return result, current_model
 
 
-def main():
+def get_optimal_model():
     # get all data
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
@@ -181,11 +181,14 @@ def main():
     logger.info(f"There are {len(walks)} walks available.")
 
     # get model estimate + parameters
-    c_lambdas, model_type = get_model_estimate(walks, starting_probabilities)
+    return get_model_estimate(walks, starting_probabilities)
+
+
+def main():
+    c_lambdas, model_type = get_optimal_model()
     logger.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
 
     # repeat for subgroups
-    logger.info("Done")
 
 
 if __name__ == '__main__':
