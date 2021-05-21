@@ -42,7 +42,7 @@ def get_p_value(computing_type: str, observed_values: np.ndarray, expected_value
     logging.info(f"P-value: {p_value:.3f}")
 
     if p_value < 0.1:
-        logging.info("Reject H0 on 90% level.")
+        logging.info("Reject H0 on 90% level.")  # that the observed mean equals the expected mean
     else:
         logging.info("Cannot reject H0.")
 
@@ -73,7 +73,7 @@ def plot_results(all_bets: pd.DataFrame):
     plt.plot(x_axis, all_bets.naive_balance, 'b--', label='naive', linewidth=0.9)
     plt.plot(x_axis, all_bets.prob_balance, 'r-', label='probability', linewidth=0.9)
     plt.plot(x_axis, all_bets.odds_balance, 'y-.', label='1/odds', linewidth=0.9)
-    plt.axis([0, len(all_bets), -4, 13])
+    plt.axis([0, len(all_bets), -10, 10])
     plt.xlabel('bet number')
     plt.ylabel('account balance')
 
@@ -98,7 +98,7 @@ def plot_results(all_bets: pd.DataFrame):
                                                            all_bets.odds_variance_wins)
 
     plt.axhline(linewidth=0.5, color='k')
-    plt.legend()
+    plt.legend(loc='upper left')
 
     fig = plt.gcf()
     fig.set_size_inches(7, 4.5)
@@ -120,7 +120,7 @@ def plot_results(all_bets: pd.DataFrame):
 
 def test_model(walks: List[List[int]], starting_probabilities: List[float], all_matches_set_odds: List[List[float]],
                c_lambda: float, model_type: str) -> pd.DataFrame:
-    coefficient = 1
+    coefficient = 1.2
 
     betting_win_naive = []
     betting_win_prob = []
