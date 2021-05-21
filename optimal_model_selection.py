@@ -7,14 +7,13 @@ import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
 from optimal_fair_odds_parameter import get_fair_odds_parameter, get_fair_odds
-from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
+from utils import COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 from walk_operations import get_current_probability
-
 
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
     query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
-            "case when result = 'home' then 1 else -1 end as result,     start_time_utc FROM (     " \
+            "CASE WHEN result = 'home' THEN 1 ELSE -1 END AS result,     start_time_utc FROM (     " \
             "SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             " \
             "WHEN match_part = 'set2'                 THEN 2             " \
             "WHEN match_part = 'set3'                 THEN 3             " \

@@ -7,12 +7,9 @@ import pandas as pd
 import numpy as np
 
 from optimal_model_selection import get_matches_data, transform_data
-from utils import get_logger
 from walk_operations import get_current_probability
 
 import scipy.stats as stat
-
-# logger = get_logger()
 
 
 def get_global_extremes_coordinates(array: np.ndarray) -> Tuple[float, float, Tuple[int, float]]:
@@ -234,4 +231,5 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(encoding='utf-8', level=logging.INFO)
     main()

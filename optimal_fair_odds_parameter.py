@@ -6,10 +6,9 @@ import pandas as pd
 import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
-from utils import get_logger, COLUMN_NAMES
+from utils import  COLUMN_NAMES
 
 EVEN_ODDS_PROBABILITY = 0.5
-
 
 
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
@@ -53,7 +52,7 @@ def find_fair_odds_parameter(training_set: pd.DataFrame) -> Optional[float]:
 
 def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
     query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
-            "case when result = 'home' then 1 else 0 end as result,     start_time_utc FROM (     " \
+            "CASE WHEN result = 'home' THEN 1 ELSE 0 END AS result,     start_time_utc FROM (     " \
             "SELECT *,         CASE             " \
             "WHEN match_part = 'set1'                 THEN 1             " \
             "WHEN match_part = 'set2'                 THEN 2             " \
@@ -63,7 +62,7 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
             "END AS set_number_odds     FROM odds) AS odds_enhanced          " \
             "INNER JOIN (SELECT *, ma.id AS matchid  FROM matches_bookmaker mb           " \
             "JOIN matches ma ON mb.match_id = ma.id           " \
-            "JOIN match_course mc ON mb.match_id = mc.match_id join tournament t on ma.tournament_id = t.id) " \
+            "JOIN match_course mc ON mb.match_id = mc.match_id JOIN tournament t ON ma.tournament_id = t.id) " \
             "AS match_course_enhanced ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id " \
             "AND     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id " \
             "AND     odds_enhanced.set_number_odds = match_course_enhanced.set_number " \
