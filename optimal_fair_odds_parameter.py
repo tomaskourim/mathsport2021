@@ -10,8 +10,8 @@ from utils import get_logger, COLUMN_NAMES
 
 EVEN_ODDS_PROBABILITY = 0.5
 
-
 logger = get_logger()
+
 
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
     odds_probability_norm = sum(1 / odds)
@@ -77,11 +77,11 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
 
 
 def get_fair_odds_parameter() -> float:
-    start_date = '2021-02-01 00:00:00.000000'
-    end_date = '2021-05-01 00:00:00.000000'
-    training_set = get_first_set_data(start_date, end_date)
-    return find_fair_odds_parameter(training_set)
-    # return 0
+    # start_date = '2021-02-01 00:00:00.000000'
+    # end_date = '2021-05-01 00:00:00.000000'
+    # training_set = get_first_set_data(start_date, end_date)
+    # return find_fair_odds_parameter(training_set)
+    return 0
 
 
 def main():

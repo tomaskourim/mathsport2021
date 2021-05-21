@@ -309,6 +309,10 @@ name "sec:Random-walk-with"
 
 \end_layout
 
+\begin_layout Standard
+strucny popis modelu, 4 varianty, jen zakladni vzorce
+\end_layout
+
 \begin_layout Subsection
 Application for tennis modelling
 \end_layout
@@ -632,6 +636,10 @@ name "sec:Model-application-for"
 
 \end_inset
 
+
+\end_layout
+
+\begin_layout Standard
 
 \end_layout
 
