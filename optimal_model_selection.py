@@ -42,25 +42,25 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
     starting_probabilities = []
     matchid = ""
     walk = []
-    set_odds = []
-    match_set_odds = []
+    all_matches_set_odds = []
+    single_match_set_odds = []
     for index, set_data in matches_data.iterrows():
         if matchid != set_data.matchid:  # TODO maybe there are some matches with odds for set1 and set3, but not set2
             matchid = set_data.matchid
-            odds = np.array([set_data.odd1, set_data.odd2])
-            probabilities = get_fair_odds(odds, fair_odds_parameter)
-            starting_probabilities.append(probabilities[0])
+            first_set_odds = np.array([set_data.odd1, set_data.odd2])
+            first_set_probabilities = get_fair_odds(first_set_odds, fair_odds_parameter)
+            starting_probabilities.append(first_set_probabilities[0])
             walks.append(walk)
             walk = [set_data.result]
-            set_odds.append(match_set_odds)
-            match_set_odds = [odds]
+            all_matches_set_odds.append(single_match_set_odds)
+            single_match_set_odds = [first_set_odds]
         else:
             walk.append(set_data.result)
-            match_set_odds.append(np.array([set_data.odd1, set_data.odd2]))
+            single_match_set_odds.append(np.array([set_data.odd1, set_data.odd2]))
     walks.append(walk)
-    set_odds.append(match_set_odds)
+    all_matches_set_odds.append(single_match_set_odds)
     walks = walks[1:]
-    set_odds = set_odds[1:]
+    all_matches_set_odds = all_matches_set_odds[1:]
 
     index = 0
     while index < len(walks):
@@ -69,14 +69,14 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
         elif len(walks[index]) == 1:
             del walks[index]
             del starting_probabilities[index]
-            del set_odds[index]
+            del all_matches_set_odds[index]
         else:
             index = index + 1
 
-    if len(walks) != len(starting_probabilities) or len(walks) != len(set_odds):
+    if len(walks) != len(starting_probabilities) or len(walks) != len(all_matches_set_odds):
         raise Exception("There has to be the same number of walks as starting probabilities and set odds.")
 
-    return walks, starting_probabilities, set_odds
+    return walks, starting_probabilities, all_matches_set_odds
 
 
 def get_single_walk_log_likelihood(log_likelihood: float, c_lambdas: List[float], starting_probability: float,
