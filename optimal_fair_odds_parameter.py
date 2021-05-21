@@ -10,7 +10,6 @@ from utils import get_logger, COLUMN_NAMES
 
 EVEN_ODDS_PROBABILITY = 0.5
 
-logger = get_logger()
 
 
 def get_fair_odds(odds: np.ndarray, fair_odds_parameter: float) -> np.ndarray:
@@ -86,7 +85,7 @@ def get_fair_odds_parameter() -> float:
 
 def main():
     fair_odds_parameter = get_fair_odds_parameter()
-    logger.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
+    logging.info(f"Optimal fair odds parameter is {fair_odds_parameter}")
 
 
 if __name__ == '__main__':

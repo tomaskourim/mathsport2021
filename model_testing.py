@@ -1,23 +1,124 @@
-from typing import List
+import logging
+import math
+from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 from optimal_model_selection import get_matches_data, transform_data
 from utils import get_logger
 from walk_operations import get_current_probability
 
-logger = get_logger()
+import scipy.stats as stat
+
+# logger = get_logger()
 
 
-def plot_results(score_evolution):
-    x_axis = range(1, len(score_evolution) + 1)
+def get_global_extremes_coordinates(array: np.ndarray) -> Tuple[float, float, Tuple[int, float]]:
+    minimum = min(array)
+    min_coordinates = (np.where(array == minimum)[0][0], minimum)
+    return minimum, max(array), min_coordinates
+
+
+def get_expected_results(expected_wins: np.ndarray, variance_wins: np.ndarray) -> Tuple[float, float]:
+    return sum(expected_wins), math.sqrt(sum(variance_wins))
+
+
+def get_p_value(computing_type: str, observed_values: np.ndarray, expected_values: np.ndarray,
+                variances: np.ndarray) -> float:
+    logging.info(f"----------------------------------------\n\t\tTesting {computing_type}:")
+    number_observations = len(observed_values)
+    x_mean = sum(observed_values) / number_observations
+    mu_hat = sum(expected_values) / number_observations
+    var_hat = sum(variances) / number_observations
+    logging.info(
+        f"Observations: {number_observations}. \
+        Observed value: {x_mean:.3f}, expected value: {mu_hat:.3f}, standard deviation: {math.sqrt(var_hat):.3f}")
+    expected_distribution = stat.norm()
+
+    observed_value = math.sqrt(number_observations) * (x_mean - mu_hat) / math.sqrt(var_hat)
+
+    cdf_observed = expected_distribution.cdf(observed_value)
+    p_value = min(cdf_observed, 1 - cdf_observed) * 2
+
+    logging.info(f"P-value: {p_value:.3f}")
+
+    if p_value < 0.1:
+        logging.info("Reject H0 on 90% level.")
+    else:
+        logging.info("Cannot reject H0.")
+
+    if p_value < 0.05:
+        logging.info("Reject H0 on 95% level.")
+
+    if p_value < 0.01:
+        logging.info("Reject H0 on 99% level.")
+
+    return p_value
+
+
+def log_result(betting_type: str, minimum: float, maximum: float, final_balance: float, expected_win: float,
+               standard_deviation: float):
+    logging.info(
+        f"{betting_type}: \
+        Min = {minimum:.2f}; \
+        Max = {maximum:.2f}; \
+        Profit: {final_balance:.2f}; \
+        ROI: {final_balance / abs(minimum):.2f} \
+        E_win: {expected_win:.2f}; \
+        Std_dev: {standard_deviation:.2f}.")
+
+
+def plot_results(all_bets: pd.DataFrame):
+    number_bets = len(all_bets)
+    x_axis = range(1, len(all_bets) + 1)
     plt.plot(x_axis, all_bets.naive_balance, 'b--', label='naive', linewidth=0.9)
     plt.plot(x_axis, all_bets.prob_balance, 'r-', label='probability', linewidth=0.9)
     plt.plot(x_axis, all_bets.odds_balance, 'y-.', label='1/odds', linewidth=0.9)
     plt.axis([0, len(all_bets), -4, 13])
     plt.xlabel('bet number')
     plt.ylabel('account balance')
+
+    naive_min, naive_max, naive_min_coordinates = get_global_extremes_coordinates(all_bets.naive_balance)
+    naive_expected_win, naive_variance = get_expected_results(all_bets.naive_expected_wins,
+                                                              all_bets.naive_variance_wins)
+    naive_min_annotation_coordinates = (naive_min_coordinates[0] - 60, naive_min_coordinates[1] + 0.3)
+    # plt.annotate('global min naive', xy=naive_min_coordinates, xytext=naive_min_annotation_coordinates,
+    #              arrowprops=dict(facecolor='black', shrink=0.01, width=1),
+    #              )
+
+    prob_min, prob_max, prob_min_coordinates = get_global_extremes_coordinates(all_bets.prob_balance)
+    prob_expected_win, prob_variance = get_expected_results(all_bets.prob_expected_wins,
+                                                            all_bets.prob_variance_wins)
+    prob_min_annotation_coordinates = (prob_min_coordinates[0] - 90, prob_min_coordinates[1] - 1)
+    # plt.annotate('global min probability and 1/odds', xy=prob_min_coordinates, xytext=prob_min_annotation_coordinates,
+    #              arrowprops=dict(facecolor='black', shrink=0.01, width=1),
+    #              )
+
+    odds_min, odds_max, _ = get_global_extremes_coordinates(all_bets.odds_balance)
+    odds_expected_win, odds_std_dev = get_expected_results(all_bets.odds_expected_wins,
+                                                           all_bets.odds_variance_wins)
+
+    plt.axhline(linewidth=0.5, color='k')
+    plt.legend()
+
+    fig = plt.gcf()
+    fig.set_size_inches(7, 4.5)
+    fig.show()
+    fig.savefig('account_balance_development.pdf', bbox_inches='tight', dpi=300)
+
+    log_result("Naiv betting", naive_min, naive_max, all_bets.naive_balance[number_bets - 1], naive_expected_win,
+               naive_variance)
+    log_result("Prob betting", prob_min, prob_max, all_bets.prob_balance[number_bets - 1], prob_expected_win,
+               prob_variance)
+    log_result("Odds betting", odds_min, odds_max, all_bets.odds_balance[number_bets - 1], odds_expected_win,
+               odds_std_dev)
+
+    # get_p_value("result", all_bets.result, all_bets.probability, all_bets.probability * (1 - all_bets.probability))
+    get_p_value("naive", all_bets.naive_wins, all_bets.naive_expected_wins, all_bets.naive_variance_wins)
+    get_p_value("prob", all_bets.prob_wins, all_bets.prob_expected_wins, all_bets.prob_variance_wins)
+    get_p_value("odds", all_bets.odds_wins, all_bets.odds_expected_wins, all_bets.odds_variance_wins)
 
 
 def test_model(walks: List[List[int]], starting_probabilities: List[float], all_matches_set_odds: List[List[float]],
@@ -127,8 +228,9 @@ def main():
     c_lambda, model_type = 0.8262665695105103, 'success_rewarded'
 
     # compare with real odds
-    final_score = test_model(walks, starting_probabilities, all_matches_set_odds, c_lambda, model_type)
-    logger.info(f"Final score after betting is {final_score}")
+    all_bets = test_model(walks, starting_probabilities, all_matches_set_odds, c_lambda, model_type)
+    plot_results(all_bets)
+    # logger.info(f"Final score after betting is {final_score}")
 
 
 if __name__ == '__main__':

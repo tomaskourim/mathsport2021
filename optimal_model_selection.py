@@ -1,3 +1,4 @@
+import logging
 from typing import List, Tuple
 
 import numpy as np
@@ -9,7 +10,6 @@ from optimal_fair_odds_parameter import get_fair_odds_parameter, get_fair_odds
 from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 from walk_operations import get_current_probability
 
-logger = get_logger()
 
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
@@ -121,7 +121,7 @@ def find_akaike_single(model: str, walks: List[List[int]], starting_probabilitie
                                      args=(walks, starting_probabilities, model))
     akaike = 2 + 2 * opt_result.fun
     if not opt_result.success:
-        logger.error(f"Could not fit model {model}")
+        logging.error(f"Could not fit model {model}")
     if opt_result.success and akaike < min_akaike:
         min_akaike = akaike
         current_model = model
@@ -135,7 +135,7 @@ def find_akaike(guess: np.ndarray, model: str, walks: List[List[int]], starting_
                               args=(walks, starting_probabilities, model))
     akaike = 2 * len(guess) + 2 * opt_result.fun
     if not opt_result.success:
-        logger.error(f"Could not fit model {model}")
+        logging.error(f"Could not fit model {model}")
     if opt_result.success and akaike < min_akaike:
         min_akaike = akaike
         current_model = model
@@ -188,7 +188,7 @@ def get_optimal_model() -> Tuple[List[float], str]:
 
     # transform data
     walks, starting_probabilities, _ = transform_data(matches_data)
-    logger.info(f"There are {len(walks)} walks available.")
+    logging.info(f"There are {len(walks)} walks available.")
 
     # get model estimate + parameters
     return get_model_estimate(walks, starting_probabilities)
@@ -196,7 +196,7 @@ def get_optimal_model() -> Tuple[List[float], str]:
 
 def main():
     c_lambdas, model_type = get_optimal_model()
-    logger.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
+    logging.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
 
     # repeat for subgroups
 
