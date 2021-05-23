@@ -1,5 +1,7 @@
 SET myvars.start_date TO '2021-02-01 00:00:00.000000';
 SET myvars.end_date TO '2021-05-01 00:00:00.000000';
+SET myvars.start_date_testing TO '2021-05-01 00:00:00.000000';
+SET myvars.end_date_testing TO '2021-05-20 00:00:00.000000';
 
 
 -- 12 372 matches total
@@ -80,8 +82,8 @@ FROM (
 ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND
     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND
     odds_enhanced.set_number_odds = match_course_enhanced.set_number
-WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date')::timestamptz AND
-    start_time_utc < CURRENT_SETTING('myvars.end_date')::timestamptz
+WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date_testing')::timestamptz AND
+    start_time_utc < CURRENT_SETTING('myvars.end_date_testing')::timestamptz
 ORDER BY start_time_utc, match_course_enhanced.matchid, match_course_enhanced.set_number;
 
 
@@ -117,6 +119,6 @@ FROM (
 ON odds_enhanced.match_bookmaker_id = match_course_enhanced.match_bookmaker_id AND
     odds_enhanced.bookmaker_id = match_course_enhanced.bookmaker_id AND
     odds_enhanced.set_number_odds = match_course_enhanced.set_number
-WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date')::timestamptz AND
-    start_time_utc < CURRENT_SETTING('myvars.end_date')::timestamptz and set_number = 1
+WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date_testing')::timestamptz AND
+    start_time_utc < CURRENT_SETTING('myvars.end_date_testing')::timestamptz and set_number = 1
 ORDER BY match_course_enhanced.matchid, match_course_enhanced.set_number;

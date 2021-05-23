@@ -1,3 +1,4 @@
+import logging
 from typing import List, Tuple
 
 import numpy as np
@@ -5,14 +6,14 @@ import pandas as pd
 import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
-from odds_to_probabilities import get_fair_odds_parameter, get_fair_odds
-from utils import get_logger, COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
+from optimal_fair_odds_parameter import get_fair_odds_parameter, get_fair_odds
+from utils import COLUMN_NAMES, ERROR_VALUE, OPTIMIZATION_ALGORITHM
 from walk_operations import get_current_probability
 
 
 def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
     query = "SELECT matchid, home,     away,     set_number,     odd1,     odd2,     " \
-            "case when result = 'home' then 1 else -1 end as result,     start_time_utc FROM (     " \
+            "CASE WHEN result = 'home' THEN 1 ELSE -1 END AS result,     start_time_utc FROM (     " \
             "SELECT *,         CASE             WHEN match_part = 'set1'                 THEN 1             " \
             "WHEN match_part = 'set2'                 THEN 2             " \
             "WHEN match_part = 'set3'                 THEN 3             " \
@@ -32,7 +33,7 @@ def get_matches_data(start_date: str, end_date: str) -> pd.DataFrame:
     return pd.DataFrame(execute_sql_postgres(query, [start_date, end_date], False, True), columns=COLUMN_NAMES)
 
 
-def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[float]]:
+def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[float], List[np.array]]:
     # transform walks into List[List[int]
     # get p0 for each walk
 
@@ -42,18 +43,25 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
     starting_probabilities = []
     matchid = ""
     walk = []
+    all_matches_set_odds = []
+    single_match_set_odds = []
     for index, set_data in matches_data.iterrows():
         if matchid != set_data.matchid:  # TODO maybe there are some matches with odds for set1 and set3, but not set2
             matchid = set_data.matchid
-            odds = np.array([set_data.odd1, set_data.odd2])
-            probabilities = get_fair_odds(odds, fair_odds_parameter)
-            starting_probabilities.append(probabilities[0])
+            first_set_odds = np.array([set_data.odd1, set_data.odd2])
+            first_set_probabilities = get_fair_odds(first_set_odds, fair_odds_parameter)
+            starting_probabilities.append(first_set_probabilities[0])
             walks.append(walk)
             walk = [set_data.result]
+            all_matches_set_odds.append(single_match_set_odds)
+            single_match_set_odds = [first_set_odds]
         else:
             walk.append(set_data.result)
+            single_match_set_odds.append(np.array([set_data.odd1, set_data.odd2]))
     walks.append(walk)
+    all_matches_set_odds.append(single_match_set_odds)
     walks = walks[1:]
+    all_matches_set_odds = all_matches_set_odds[1:]
 
     index = 0
     while index < len(walks):
@@ -62,13 +70,14 @@ def transform_data(matches_data: pd.DataFrame) -> Tuple[List[List[int]], List[fl
         elif len(walks[index]) == 1:
             del walks[index]
             del starting_probabilities[index]
+            del all_matches_set_odds[index]
         else:
             index = index + 1
 
-    if len(walks) != len(starting_probabilities):
-        raise Exception("There has to be the same number of walks as starting probabilities.")
+    if len(walks) != len(starting_probabilities) or len(walks) != len(all_matches_set_odds):
+        raise Exception("There has to be the same number of walks as starting probabilities and set odds.")
 
-    return walks, starting_probabilities
+    return walks, starting_probabilities, all_matches_set_odds
 
 
 def get_single_walk_log_likelihood(log_likelihood: float, c_lambdas: List[float], starting_probability: float,
@@ -111,7 +120,7 @@ def find_akaike_single(model: str, walks: List[List[int]], starting_probabilitie
                                      args=(walks, starting_probabilities, model))
     akaike = 2 + 2 * opt_result.fun
     if not opt_result.success:
-        logger.error(f"Could not fit model {model}")
+        logging.error(f"Could not fit model {model}")
     if opt_result.success and akaike < min_akaike:
         min_akaike = akaike
         current_model = model
@@ -125,7 +134,7 @@ def find_akaike(guess: np.ndarray, model: str, walks: List[List[int]], starting_
                               args=(walks, starting_probabilities, model))
     akaike = 2 * len(guess) + 2 * opt_result.fun
     if not opt_result.success:
-        logger.error(f"Could not fit model {model}")
+        logging.error(f"Could not fit model {model}")
     if opt_result.success and akaike < min_akaike:
         min_akaike = akaike
         current_model = model
@@ -170,24 +179,26 @@ def get_model_estimate(walks: List[List[int]], starting_probabilities: List[floa
     return result, current_model
 
 
-def main():
+def get_optimal_model() -> Tuple[List[float], str]:
     # get all data
     start_date = '2021-02-01 00:00:00.000000'
     end_date = '2021-05-01 00:00:00.000000'
     matches_data = get_matches_data(start_date, end_date)
 
     # transform data
-    walks, starting_probabilities = transform_data(matches_data)
-    logger.info(f"There are {len(walks)} walks available.")
+    walks, starting_probabilities, _ = transform_data(matches_data)
+    logging.info(f"There are {len(walks)} walks available.")
 
     # get model estimate + parameters
-    c_lambdas, model_type = get_model_estimate(walks, starting_probabilities)
-    logger.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
+    return get_model_estimate(walks, starting_probabilities)
+
+
+def main():
+    c_lambdas, model_type = get_optimal_model()
+    logging.info(f"Optimal mode type is {model_type} with lambda = {c_lambdas}.")
 
     # repeat for subgroups
-    logger.info("Done")
 
 
 if __name__ == '__main__':
-    logger = get_logger()
     main()

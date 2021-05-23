@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from odds_to_probabilities import get_fair_odds
+from optimal_fair_odds_parameter import get_fair_odds
 
 
 class GeneralTest(unittest.TestCase):
