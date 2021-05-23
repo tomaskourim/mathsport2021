@@ -73,7 +73,7 @@ def plot_results(all_bets: pd.DataFrame):
     plt.plot(x_axis, all_bets.naive_balance, 'b--', label='naive', linewidth=0.9)
     plt.plot(x_axis, all_bets.prob_balance, 'r-', label='probability', linewidth=0.9)
     plt.plot(x_axis, all_bets.odds_balance, 'y-.', label='1/odds', linewidth=0.9)
-    plt.axis([0, len(all_bets), -10, 10])
+    plt.axis([0, len(all_bets), -8, 15])
     plt.xlabel('bet number')
     plt.ylabel('account balance')
 
@@ -214,7 +214,7 @@ def test_model(walks: List[List[int]], starting_probabilities: List[float], all_
 def main():
     # get all matches from testing dataset
     start_date = '2021-05-01 00:00:00.000000'
-    end_date = '2021-05-20 00:00:00.000000'
+    end_date = '2021-05-23 00:00:00.000000'
     matches_data = get_matches_data(start_date, end_date)
 
     # transform data
@@ -231,5 +231,5 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(encoding='utf-8', level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)
     main()
