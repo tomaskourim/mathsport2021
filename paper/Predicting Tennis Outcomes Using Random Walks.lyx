@@ -7,7 +7,7 @@
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
-\language english
+\language british
 \language_package default
 \inputencoding utf8
 \fontencoding global
@@ -72,7 +72,7 @@
 \paragraph_indentation default
 \is_math_indent 0
 \math_numbering_side default
-\quotes_style english
+\quotes_style british
 \dynamic_quotes 0
 \papercolumns 1
 \papersides 1
