@@ -630,15 +630,17 @@ name "subsec:Model-selection"
 \begin_layout Standard
 For each match with data for at least 2 sets available (i.e.
  with at least 1 prediction opportunity), the first set winning probability
+ 
 \begin_inset Formula $p_{0}$
 \end_inset
 
  was derived using the procedure and parameter from previous paragraph.
  Then, for each of the four model variants the optimal value of coefficient
+ 
 \begin_inset Formula $\lambda$
 \end_inset
 
- was found again using the maximum (log) likelihood estimate
+ was found again using the maximum likelihood estimate
 \begin_inset Formula 
 \[
 L=\sum_{i=1}^{N}\sum_{j=1}^{N_{i}}x_{ij}p_{ij}+(1-x_{ij})(1-p_{ij}),
@@ -646,39 +648,39 @@ L=\sum_{i=1}^{N}\sum_{j=1}^{N_{i}}x_{ij}p_{ij}+(1-x_{ij})(1-p_{ij}),
 
 \end_inset
 
-where
+where 
 \begin_inset Formula $N$
 \end_inset
 
- denotes the number of matches in testing dataset,
+ denotes the number of matches in testing dataset, 
 \begin_inset Formula $N_{i}$
 \end_inset
 
- the number of predictable sets in
+ the number of predictable sets in 
 \begin_inset Formula $i-th$
 \end_inset
 
- match,
+ match, 
 \begin_inset Formula $x_{ij}$
 \end_inset
 
- is the result of the
+ is the result of the 
 \begin_inset Formula $j-th$
 \end_inset
 
- set in the
+ set in the 
 \begin_inset Formula $i-th$
 \end_inset
 
- match,
+ match, 
 \begin_inset Formula $x_{ij}=1$
 \end_inset
 
- if Player A won the set,
+ if Player A won the set, 
 \begin_inset Formula $x_{ij}=0$
 \end_inset
 
- and
+ and 
 \begin_inset Formula $p_{ij}$
 \end_inset
 
@@ -687,17 +689,17 @@ where
 \end_layout
 
 \begin_layout Standard
- Finally, the Akaike Information Criterion
+Finally, the Akaike Information Criterion 
 \begin_inset Formula $AIC=2k-2ln(L)$
 \end_inset
 
 , which considers the number of parameters to correctly the best model,
  was used.
- Here
+ Here 
 \begin_inset Formula $k$
 \end_inset
 
- is the number of model parameters and
+ is the number of model parameters and 
 \begin_inset Formula $L$
 \end_inset
 
@@ -707,21 +709,21 @@ where
 \begin_layout Standard
 Based on the available traning data the
 \emph on
-single lambda succes rewarding
+ single lambda succes rewarding
 \emph default
-model variant was selected, with
+ model variant was selected, with 
 \begin_inset Formula $\lambda=0.826$
 \end_inset
 
- and
+ and 
 \begin_inset Formula $p_{0}$
 \end_inset
 
- computed for each match using the
+ computed for each match using the 
 \begin_inset Formula $n_{2}$
 \end_inset
 
- normalization function defined in
+ normalization function defined in 
 \begin_inset CommandInset ref
 LatexCommand eqref
 reference "eq:n2_normalization"
