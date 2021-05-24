@@ -846,7 +846,7 @@ cite{ja2015ddny}
 \begin_inset Formula $p>\frac{1}{odds}\cdot m$
 \end_inset
 
-, where
+, where 
 \begin_inset Formula $m$
 \end_inset
 
@@ -872,7 +872,7 @@ For
 \begin_inset Formula $\frac{total\,profit}{total\,bankroll\,needed}.$
 \end_inset
 
- For this parameter, the naive betting yields
+ For this parameter, the naive betting yields 
 \begin_inset Formula $ROI=148\%$
 \end_inset
 
