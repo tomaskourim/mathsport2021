@@ -128,7 +128,7 @@ cite{pearson1905problem}
  Since then the concept was further elaborated, the random walk was described
  in much detail and many alternation of the original model were introduced.
  One of the most recent variations of a random walk is a random walk with
- varying probabilities, a concept introduced recently by the authors
+ varying probabilities, a concept introduced recently by the authors 
 \begin_inset ERT
 status open
 
@@ -178,7 +178,7 @@ A proper model of a tennis match, and more generally any sporting event,
 \begin_layout Standard
 The paper is organized as follows.
  Next chapter briefly introduces the model used for tennis modeling.
- Section
+ Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Data-description"
@@ -188,7 +188,7 @@ noprefix "false"
 
 \end_inset
 
- provides general description of the data used, Section
+ provides general description of the data used, Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Optimal-model-selection"
@@ -199,7 +199,7 @@ noprefix "false"
 \end_inset
 
  describes the model fitting procedure.
- In Chapter
+ In Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Model-application-for"
@@ -211,7 +211,7 @@ noprefix "false"
 
  the model is tested against a database of real life bookmakers' odds and
  its performance is evaluated.
- Section
+ Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Conclusion"
@@ -239,19 +239,19 @@ name "sec:Random-walk-with"
 The idea behind the model of a random walk with varying probability is that
  the probability distribution of the next step depends directly on the result
  of the previous step in the following manner.
- Let us have a basic random walk with steps
+ Let us have a basic random walk with steps 
 \begin_inset Formula $X\in\{-1,\,1\}$
 \end_inset
 
- with Bernouli distribution depending on a parameter
+ with Bernouli distribution depending on a parameter 
 \begin_inset Formula $p$
 \end_inset
 
- so that
+ so that 
 \begin_inset Formula $P(x=1)=p$
 \end_inset
 
- and
+ and 
 \begin_inset Formula $P(x=-1)=1-p$
 \end_inset
 
@@ -263,16 +263,16 @@ The idea behind the model of a random walk with varying probability is that
  and the result of previous step.
  We can define 2 major types of random walk with varying probability -
 \emph on
-success punishing
+ success punishing
 \emph default
-and
+ and
 \emph on
-success rewarding
+ success rewarding
 \emph default
 .
  The first denotes that everytime an event occurs, the probability of its
  repetition decreases, i.e.
- if step
+ if step 
 \begin_inset Formula $X_{t}=1$
 \end_inset
 
@@ -280,42 +280,43 @@ success rewarding
 \begin_inset Formula $1$
 \end_inset
 
- again decreases by a parameter
+ again decreases by a parameter 
 \begin_inset Formula $\lambda$
 \end_inset
 
- so that
+ so that 
 \begin_inset Formula $p_{t+1}=\lambda p_{t}$
 \end_inset
 
 .
  For the
 \emph on
-success rewarding
+ success rewarding
 \emph default
-model, the oposite holds and every time an event occurs, the probability
+ model, the oposite holds and every time an event occurs, the probability
  of its repetition increases.
 \end_layout
 
 \begin_layout Standard
 The model can be further refined by using two separate parameters, one for
  each direction, i.e.
+ 
 \begin_inset Formula $\lambda=[\lambda_{1},\,\lambda_{2}]$
 \end_inset
 
 .
  Again, there can be
 \emph on
-success punishing
+ success punishing
 \emph default
-and
+ and
 \emph on
-success rewarding
+ success rewarding
 \emph default
-model.
+ model.
  Thus, together there are four basic model variants.
  Formal definitions of all four model variants and their detailed description
- together with the derivation of useful formulas can be found in
+ together with the derivation of useful formulas can be found in 
 \begin_inset ERT
 status open
 
