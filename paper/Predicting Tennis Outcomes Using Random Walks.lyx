@@ -750,7 +750,7 @@ name "sec:Model-application-for"
 \begin_layout Standard
 To test the quality of the model, following experiment was performed.
  For each match in the dataset, first the starting probability was derived
- using the procedure described in Section
+ using the procedure described in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "subsec:Starting-probability-selection"
@@ -764,13 +764,13 @@ noprefix "false"
  Then, it was iterated over the sets played, and for each set, the set winning
  probability was computed using the
 \emph on
-success rewarding
+ success rewarding
 \emph default
-model and memory parameter
+ model and memory parameter 
 \begin_inset Formula $\lambda=0.826$
 \end_inset
 
- as specified in Section
+ as specified in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "subsec:Model-selection"
@@ -798,19 +798,19 @@ Choosing the correct betting strategy is one of the key elements of successful
 \end_inset
 
  unit was bet every time.
- Then, the probability base strategy, where
+ Then, the probability base strategy, where 
 \begin_inset Formula $p$
 \end_inset
 
  (probability of winning) units was bet.
- Finally the odds based strategy, where
+ Finally the odds based strategy, where 
 \begin_inset Formula $\frac{1}{odds}$
 \end_inset
 
  was bet.
  The strategies differ in the expected wins and their variance.
  The theoretical properties of the betting strategies can be observed in
- Table
+ Table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:strategies"
@@ -820,12 +820,12 @@ noprefix "false"
 
 \end_inset
 
- with the special case where
+ with the special case where 
 \begin_inset Formula $p=\frac{1}{a}$
 \end_inset
 
 , i.e.
- in case of fair odds
+ in case of fair odds 
 \begin_inset ERT
 status open
 
@@ -841,14 +841,14 @@ cite{ja2015ddny}
 .
  Besides the different betting amount strategies, it is also important to
  choose when to bet.
- The basic strategy is to bet always when
+ The basic strategy is to bet always when 
 \begin_inset Formula $p>\frac{1}{odds}$
 \end_inset
 
 .
  It turns out that it is more favourable to bet only when there is a margin
  present, i.e.
- when
+ when 
 \begin_inset Formula $p>\frac{1}{odds}\cdot m$
 \end_inset
 
@@ -856,7 +856,7 @@ cite{ja2015ddny}
 \begin_inset Formula $m$
 \end_inset
 
- is a margin parameter,
+ is a margin parameter, 
 \begin_inset Formula $m>1.$
 \end_inset
 
@@ -864,17 +864,19 @@ cite{ja2015ddny}
 \end_layout
 
 \begin_layout Standard
-For
+For 
 \begin_inset Formula $m=1.2$
 \end_inset
 
 , i.e.
+ 
 \begin_inset Formula $20\%$
 \end_inset
 
  margin, there are 65 virtual bets made and a significant profit is achieved.
  One of the parameters to evaluate a quality of a betting strategy is the
  return of investment (ROI), i.e.
+ 
 \begin_inset Formula $\frac{total\,profit}{total\,bankroll\,needed}.$
 \end_inset
 
@@ -1291,10 +1293,11 @@ name "tab:strategies"
 \end_inset
 
 Theoretical values of wins and variances for different betting strategies.
+ 
 \begin_inset Formula $p$
 \end_inset
 
- is the probability of winning,
+ is the probability of winning, 
 \begin_inset Formula $a$
 \end_inset
 
