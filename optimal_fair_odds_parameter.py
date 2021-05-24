@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.optimize as opt
 
 from database_operations import execute_sql_postgres
-from utils import  COLUMN_NAMES
+from utils import COLUMN_NAMES
 
 EVEN_ODDS_PROBABILITY = 0.5
 
@@ -75,11 +75,10 @@ def get_first_set_data(start_date: str, end_date: str) -> pd.DataFrame:
 
 
 def get_fair_odds_parameter() -> float:
-    # start_date = '2021-02-01 00:00:00.000000'
-    # end_date = '2021-05-01 00:00:00.000000'
-    # training_set = get_first_set_data(start_date, end_date)
-    # return find_fair_odds_parameter(training_set)
-    return 0
+    start_date = '2021-02-01 00:00:00.000000'
+    end_date = '2021-05-01 00:00:00.000000'
+    training_set = get_first_set_data(start_date, end_date)
+    return find_fair_odds_parameter(training_set)
 
 
 def main():

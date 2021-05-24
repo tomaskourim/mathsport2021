@@ -7,8 +7,8 @@ SET myvars.end_date_testing TO '2021-05-20 00:00:00.000000';
 -- 12 372 matches total
 SELECT *
 FROM matches
-WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date')::timestamptz AND
-    start_time_utc < CURRENT_SETTING('myvars.end_date')::timestamptz;
+WHERE start_time_utc >= CURRENT_SETTING('myvars.start_date_testing')::timestamptz AND
+    start_time_utc < CURRENT_SETTING('myvars.end_date_testing')::timestamptz;
 
 -- 3 642 matches with at least one set result
 SELECT DISTINCT match_id
@@ -24,8 +24,8 @@ FROM (
     FROM (
         SELECT match_id, COUNT(*) AS sets_won
         FROM match_course
-        WHERE utc_time_recorded >= CURRENT_SETTING('myvars.start_date')::timestamptz AND
-            utc_time_recorded < CURRENT_SETTING('myvars.end_date')::timestamptz
+        WHERE utc_time_recorded >= CURRENT_SETTING('myvars.start_date_testing')::timestamptz AND
+            utc_time_recorded < CURRENT_SETTING('myvars.end_date_testing')::timestamptz
         GROUP BY match_id, result
     ) AS sets_won
     GROUP BY match_id

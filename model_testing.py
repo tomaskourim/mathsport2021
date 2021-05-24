@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-from optimal_model_selection import get_matches_data, transform_data
+from optimal_model_selection import get_matches_data, transform_data, get_optimal_model
 from walk_operations import get_current_probability
 
 import scipy.stats as stat
@@ -221,8 +221,7 @@ def main():
     walks, starting_probabilities, all_matches_set_odds = transform_data(matches_data)
 
     # compute probability and odds for each set
-    # c_lambda, model_type = get_optimal_model()
-    c_lambda, model_type = 0.8262665695105103, 'success_rewarded'
+    c_lambda, model_type = get_optimal_model()
 
     # compare with real odds
     all_bets = test_model(walks, starting_probabilities, all_matches_set_odds, c_lambda, model_type)

@@ -99,23 +99,10 @@ Recently introduced random walk model showed its possible use in predicting
  tennis men Grand Slam tournaments outcomes.
  The model was then further examined in and its theoretical background was
  described in more detail.
-\end_layout
-
-\begin_layout Abstract
-The model is trained using the most recent data and then applied for in-play
- betting against a bookmaker.
- The overall performance of the model is evaluated and compared to random
- betting as well as to a logistic regression model.
- The betting strategy is then fine-tuned and applied only on selected opportunit
-ies, such as Grand Slams only, men/women tournaments only or when certain
- player/match conditions are met.
- The respective betting strategies are evaluated and the overall model’s
- performance is analyzed.
-\end_layout
-
-\begin_layout Abstract
-Possible improvements of the model are discussed with respect to the obtained
- results.
+ In this paper the model is trained using the most recent data and then
+ applied for in-play betting against a bookmaker.
+ Different betting strategies are tested and the overall performance of
+ the model is evaluated.
 \end_layout
 
 \begin_layout Section
@@ -124,7 +111,7 @@ Introduction
 
 \begin_layout Standard
 Radnom walk was first introduced by K.
- Pearson more than 100 years ago 
+ Pearson over 100 years ago 
 \begin_inset ERT
 status open
 
@@ -182,9 +169,9 @@ A proper model of a tennis match, and more generally any sporting event,
  It can serve the athletes and their coaches to improve their strengths
  and eliminate weaknesess, it can bring new insides into the game and it
  is especially useful in the sports betting industry.
- A proper model can be used by bookmakers to provide more acurate odds,
- it can used by professional bettors to gain an edge against the bookmakers
- and robust model can also help to detect fraudsters selling their matches
+ Such model can be used by bookmakers to provide more acurate odds, it can
+ used by professional bettors to gain an edge against the bookmakers and
+ a robust model can also help to detect fraudsters selling their matches
  or betting on games where the result was agreed long before the game even
  started.
  
@@ -193,7 +180,7 @@ A proper model of a tennis match, and more generally any sporting event,
 \begin_layout Standard
 The paper is organized as follows.
  Next chapter briefly introduces the model used for tennis modeling.
- Section
+ Section 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Data-description"
@@ -214,7 +201,7 @@ noprefix "false"
 \end_inset
 
  describes the model fitting procedure.
- In Chapter
+ In Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Model-application-for"
@@ -252,8 +239,8 @@ name "sec:Random-walk-with"
 
 \begin_layout Standard
 The idea behind the model of a random walk with varying probability is that
- the probability distribution of the next step depends directly on the previous
- step.
+ the probability distribution of the next step depends directly on the result
+ of the previous step in the following manner.
  Let us have a basic random walk with steps 
 \begin_inset Formula $X\in\{-1,\,1\}$
 \end_inset
@@ -332,8 +319,8 @@ success rewarding
 \emph default
 model.
  Thus, together there are four basic model variants.
- Formal definitions of all four model variants together with the derivation
- of useful formulas can be seen in 
+ Formal definitions of all four model variants and their detailed description
+ together with the derivation of useful formulas can be found in 
 \begin_inset ERT
 status open
 
@@ -382,9 +369,12 @@ name "sec:Data-description"
 
 \begin_layout Standard
 For the purpose of this paper an automatic data gathering tool was created.
- This tool was continuously scraping data from tipsport.cz, the website of
- the biggest Czech bookmaker, and saving provided odds for the winner of
- the first set of each match and, if available, also the 
+ This tool was continuously scraping data from 
+\emph on
+www.tipsport.cz
+\emph default
+, the website of the biggest Czech bookmaker, gathering provided odds for
+ the winner of the first set of each match and, if available, also the 
 \emph on
 in-play
 \emph default
@@ -393,15 +383,18 @@ in-play
  The tool was developed using the Python programming language with the help
  of Selenium framework.
  PostgreSQL database deployed on Digital Ocean infrastructure was used for
- storing data.
- The tool was gathering data from February 2021 until the submission of
- this paper (May 24th 2021).
- Data from February till the end of April were used as a training dataset,
- data from May as testing dataset.
- Toghether there were 12 372 matches in the training dataset and XXX in
- the testing dataset.
+ data storage.
+ For the purpose of this paper, data from February until May 2021 was available.
+ 
+\end_layout
+
+\begin_layout Standard
+The data was split into training and testing datasets.
+ Training dataset contains odds and results of matches played from February
+ till the end of April, May matches represent the testing dataset.
+ In the training dataset, there were 12 372 matches.
  Complete information, i.e.
- both odds and result, were available only for 3 365 matches (mostly because
+ both odds and result, were available for 3 365 matches (mostly because
  the bookmaker did not provide 
 \emph on
 in-play
@@ -415,14 +408,14 @@ best-of-three
 \emph on
 best-of-five
 \emph default
- in case od 2021 ATP Australian Open) there were XXX sets played where a
- prediction could be made.
- For the testing dataset the numbers are as follow XXX.
- 
+ in case od 2021 ATP Australian Open) there were 8 310 sets played where
+ all information required for the presented model was available.
+ The testing dataset contains 3 076 matches, 1 150 of witch with complete
+ information, and there are 2 796 relevant sets.
 \end_layout
 
 \begin_layout Section
-Optimal model selection
+Model training
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Optimal-model-selection"
@@ -443,9 +436,14 @@ noprefix "false"
 
 \end_inset
 
-, there are 4 basic variants of the model altogether - success punishing
- or success rewarding with either one or two coefficients lambda.
- The first step in tennis prediction is to select the proper model variant.
+, there are 4 basic variants of the model altogether with two (or three
+ in case of 
+\begin_inset Formula $\lambda=[\lambda_{1},\,\lambda_{2}]$
+\end_inset
+
+) unknown parameters.
+ Model training thus consists of two steps, best model variant selection
+ and finding the optimal parameter.
 \end_layout
 
 \begin_layout Subsection
@@ -460,20 +458,11 @@ name "subsec:Starting-probability-selection"
 \end_layout
 
 \begin_layout Standard
-The random walk with varying probabilities is a simple mode with only 2
- parameters, starting probability 
+The first unknown parameter of the model is the starting probability 
 \begin_inset Formula $p_{0}$
 \end_inset
 
- and coefficient 
-\begin_inset Formula $\lambda$
-\end_inset
-
- (possibly as 
-\begin_inset Formula $[\lambda_{1},\ \lambda_{2}]$
-\end_inset
-
-).
+.
  In tennis modelling, coefficient 
 \begin_inset Formula $p_{0}=p_{A}$
 \end_inset
@@ -529,11 +518,11 @@ This can be further improved by introducing a third normalization function
 \begin_inset Formula $n_{1}$
 \end_inset
 
-and 
+ and 
 \begin_inset Formula $n_{2}$
 \end_inset
 
-such that 
+ such that 
 \begin_inset Formula $\mu(o,0)=n_{2}(o)$
 \end_inset
 
@@ -591,16 +580,12 @@ where
 \begin_inset Formula $x_{i}=1$
 \end_inset
 
- if Player A won the 
-\begin_inset Formula $i-th$
-\end_inset
-
- set, 
+ if Player A won the set, 
 \begin_inset Formula $x_{i}=0$
 \end_inset
 
  otherwise.
- or computational reasons the 
+ For computational reasons the 
 \emph on
 log-likelihood 
 \emph default
@@ -635,11 +620,11 @@ minimize_scalar
 \begin_inset Formula $n_{2}$
 \end_inset
 
- for normalization (poznamka, pro zenske singly to vychazi 0.96).
+ for normalization.
 \end_layout
 
 \begin_layout Subsection
-Model selection
+Model and memory parameter selection
 \begin_inset CommandInset label
 LatexCommand label
 name "subsec:Model-selection"
@@ -651,13 +636,12 @@ name "subsec:Model-selection"
 
 \begin_layout Standard
 For each match with data for at least 2 sets available (i.e.
- with at least 1 prediction opportunity), the starting set winning probability
- was derived using the procedure and parameter from previous paragraph,
- and used as parameter 
+ with at least 1 prediction opportunity), the first set winning probability
+ 
 \begin_inset Formula $p_{0}$
 \end_inset
 
-.
+ was derived using the procedure and parameter from previous paragraph.
  Then, for each of the four model variants the optimal value of coefficient
  
 \begin_inset Formula $\lambda$
