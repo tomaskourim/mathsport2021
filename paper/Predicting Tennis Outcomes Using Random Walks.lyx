@@ -158,7 +158,7 @@ cite{turban2010random}
 \end_inset
 
 .
- This model seems particulary well suited to model different sporting events,
+ This model seems particularly well suited to model different sporting events,
  especially tennis matches.
 \end_layout
 
@@ -166,11 +166,11 @@ cite{turban2010random}
 A proper model of a tennis match, and more generally any sporting event,
  is of a great value.
  It can serve the athletes and their coaches to improve their strengths
- and eliminate weaknesess, it can bring new insides into the game and it
+ and eliminate weaknesses, it can bring new insides into the game and it
  is especially useful in the sports betting industry.
- Such model can be used by bookmakers to provide more acurate odds, it can
- used by professional bettors to gain an edge against the bookmakers and
- a robust model can also help to detect fraudsters selling their matches
+ Such model can be used by bookmakers to provide more accurate odds, it
+ can used by professional bettors to gain an edge against the bookmakers
+ and a robust model can also help to detect fraudsters selling their matches
  or betting on games where the result was agreed long before the game even
  started.
 \end_layout
@@ -209,7 +209,7 @@ noprefix "false"
 
 \end_inset
 
- the model is tested against a database of real life bookmakers' odds and
+ the model is tested against a database of real life bookmaker's odds and
  its performance is evaluated.
  Section 
 \begin_inset CommandInset ref
@@ -243,7 +243,7 @@ The idea behind the model of a random walk with varying probability is that
 \begin_inset Formula $X\in\{-1,\,1\}$
 \end_inset
 
- with Bernouli distribution depending on a parameter 
+ with Bernoulli distribution depending on a parameter 
 \begin_inset Formula $p$
 \end_inset
 
@@ -270,7 +270,7 @@ The idea behind the model of a random walk with varying probability is that
  success rewarding
 \emph default
 .
- The first denotes that everytime an event occurs, the probability of its
+ The first denotes that every time an event occurs, the probability of its
  repetition decreases, i.e.
  if step 
 \begin_inset Formula $X_{t}=1$
@@ -293,7 +293,7 @@ The idea behind the model of a random walk with varying probability is that
 \emph on
  success rewarding
 \emph default
- model, the oposite holds and every time an event occurs, the probability
+ model, the opposite holds and every time an event occurs, the probability
  of its repetition increases.
 \end_layout
 
@@ -333,7 +333,7 @@ cite{ja2019apmat}
 \end_layout
 
 \begin_layout Subsection
-Application for tennis modelling
+Application for tennis modeling
 \end_layout
 
 \begin_layout Standard
@@ -341,7 +341,7 @@ The random walk model can be applied to model any discrete time random process.
  Such processes often occur in sports, especially in sports played not for
  certain amount of time, but for certain amount of points.
  These sports include for example volleyball, badminton or tennis.
- Tennis seems as particulary interesting sport in terms of discrete random
+ Tennis seems as particularly interesting sport in terms of discrete random
  processes.
  There are several such processes.
  Series of matches can be considered a discrete random process, the sets
@@ -402,7 +402,7 @@ The data was split into training and testing datasets.
 \emph on
  best-of-five
 \emph default
- in case od 2021 ATP Australian Open) there were 8 310 sets played where
+ in case of 2021 ATP Australian Open) there were 8 310 sets played where
  all information required for the presented model was available.
  The testing dataset contains 3 076 matches, 1 150 of witch with complete
  information, and there are 2 796 relevant sets.
@@ -457,7 +457,7 @@ The first unknown parameter of the model is the starting probability
 \end_inset
 
 .
- In tennis modelling, coefficient 
+ In tennis modeling, coefficient 
 \begin_inset Formula $p_{0}=p_{A}$
 \end_inset
 
@@ -489,7 +489,7 @@ The first unknown parameter of the model is the starting probability
 \end_inset
 
  does not provide reasonable results.
- In fact, bookmakers margin is usually unevently distributed towards the
+ In fact, bookmakers margin is usually unevenly distributed towards the
  outsider.
  Therefore, an alternative normalization function can be used
 \begin_inset Formula 
@@ -707,9 +707,9 @@ Finally, the Akaike Information Criterion
 \end_layout
 
 \begin_layout Standard
-Based on the available traning data the
+Based on the available training data the
 \emph on
- single lambda succes rewarding
+ single lambda success rewarding
 \emph default
  model variant was selected, with 
 \begin_inset Formula $\lambda=0.826$
@@ -793,7 +793,7 @@ Choosing the correct betting strategy is one of the key elements of successful
  There exists a large number of possible approaches and the detailed description
  of them is beyond the scope of this paper.
  For testing purposes, there were three basic strategies tested.
- First, the naive betting strategy, where simpy
+ First, the naive betting strategy, where simply
 \begin_inset Formula $1$
 \end_inset
 
@@ -846,7 +846,7 @@ cite{ja2015ddny}
 \end_inset
 
 .
- It turns out that it is more favourable to bet only when there is a margin
+ It turns out that it is more favorable to bet only when there is a margin
  present, i.e.
  when 
 \begin_inset Formula $p>\frac{1}{odds}\cdot m$
@@ -1366,14 +1366,14 @@ In this paper, a recently introduced model of a random walk with varying
  probabilities was used to predict the development of a tennis match.
  The quality of the predictions was tested against a real life odds provided
  by a bookmaker and the results confirm big potential of the model for tennis
- modelling.
- To better validate the model quality a larger dataset has to be aquired.
+ modeling.
+ To better validate the model quality a larger dataset has to be acquired.
  The model can be further improved, for example by introducing a variable
  memory coefficient 
 \begin_inset Formula $\lambda$
 \end_inset
 
- or by combining the model with some of the more clasical, regression based
+ or by combining the model with some of the more classical, regression based
  approaches.
  This will be subject of a further research.
 \end_layout
@@ -1396,7 +1396,11 @@ The source code containing all functionality mentioned in this article is
 status open
 
 \begin_layout Plain Layout
-https://github.com/tomaskourim/mathsport2021
+
+\lang british
+https
+\lang english
+://github.com/tomaskourim/mathsport2021
 \end_layout
 
 \end_inset
