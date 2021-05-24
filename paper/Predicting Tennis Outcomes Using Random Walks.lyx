@@ -1369,7 +1369,7 @@ In this paper, a recently introduced model of a random walk with varying
  modelling.
  To better validate the model quality a larger dataset has to be aquired.
  The model can be further improved, for example by introducing a variable
- memory coefficient
+ memory coefficient 
 \begin_inset Formula $\lambda$
 \end_inset
 
