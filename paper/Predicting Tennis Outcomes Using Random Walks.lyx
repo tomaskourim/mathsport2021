@@ -111,7 +111,7 @@ Introduction
 
 \begin_layout Standard
 Random walk was first introduced by K.
- Pearson over 100 years ago
+ Pearson over 100 years ago 
 \begin_inset ERT
 status open
 
@@ -144,7 +144,7 @@ cite{ja2017ddny}
 .
  It is based on a similar concept of a random walk with varying step size
  introduced by L.
- Turban
+ Turban 
 \begin_inset ERT
 status open
 
@@ -490,7 +490,7 @@ odds with bookmaker's winning margin).
  In fact, bookmakers margin is usually unevently distributed towards the
  outsider.
  Therefore, an alternative normalization function can be used:
-\begin_inset Formula
+\begin_inset Formula 
 \begin{equation}
 p_{A}=n_{2}(o)=\frac{1}{o_{A}}+\frac{o_{A}o_{B}-o_{A}-o_{B}}{o_{B}(o_{A}+o_{B})}.\label{eq:n2_normalization}
 \end{equation}
@@ -539,7 +539,7 @@ To obtain reasonable estimation of the model parameter
  Bookmaker's odds for the first set and the actual result of the first set
  were used.
  The likelihood function is defined as
-\begin_inset Formula
+\begin_inset Formula 
 \[
 L=\prod_{i=1}^{N}(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)),
 \]
@@ -585,7 +585,7 @@ log-likelihood
 
  was used, i.e.
  the function
-\begin_inset Formula
+\begin_inset Formula 
 \[
 L_{l}=\sum_{i=1}^{N}ln(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)).
 \]
@@ -635,7 +635,7 @@ For each match with data for at least 2 sets available (i.e.
 \end_inset
 
  was found again using the maximum (log) likelihood estimate
-\begin_inset Formula
+\begin_inset Formula 
 \[
 L=\sum_{i=1}^{N}\sum_{j=1}^{N_{i}}x_{ij}p_{ij}+(1-x_{ij})(1-p_{ij}),
 \]
@@ -858,7 +858,7 @@ cite{ja2015ddny}
 \end_layout
 
 \begin_layout Standard
- For
+For
 \begin_inset Formula $m=1.2$
 \end_inset
 
@@ -876,16 +876,16 @@ cite{ja2015ddny}
 \begin_inset Formula $ROI=148\%$
 \end_inset
 
-, probability based betting
+, probability based betting 
 \begin_inset Formula $ROI=98\%$
 \end_inset
 
- and odds based betting
+ and odds based betting 
 \begin_inset Formula $ROI=111\%$
 \end_inset
 
 .
- The development of the portfolio balance can be seen in Figure
+ The development of the portfolio balance can be seen in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:A-graph-showing"
