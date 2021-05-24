@@ -110,8 +110,8 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-Radnom walk was first introduced by K.
- Pearson over 100 years ago 
+Random walk was first introduced by K.
+ Pearson over 100 years ago
 \begin_inset ERT
 status open
 
@@ -128,7 +128,7 @@ cite{pearson1905problem}
  Since then the concept was further elaborated, the random walk was described
  in much detail and many alternation of the original model were introduced.
  One of the most recent variations of a random walk is a random walk with
- varying probabilities, a concept introduced recently by the authors 
+ varying probabilities, a concept introduced recently by the authors
 \begin_inset ERT
 status open
 
@@ -143,8 +143,8 @@ cite{ja2017ddny}
 
 .
  It is based on a similar concept of a random walk with varying step size
- ntroduced by L.
- Turban 
+ introduced by L.
+ Turban
 \begin_inset ERT
 status open
 
@@ -160,7 +160,6 @@ cite{turban2010random}
 .
  This model seems particulary well suited to model different sporting events,
  especially tennis matches.
- 
 \end_layout
 
 \begin_layout Standard
@@ -174,13 +173,12 @@ A proper model of a tennis match, and more generally any sporting event,
  a robust model can also help to detect fraudsters selling their matches
  or betting on games where the result was agreed long before the game even
  started.
- 
 \end_layout
 
 \begin_layout Standard
 The paper is organized as follows.
  Next chapter briefly introduces the model used for tennis modeling.
- Section 
+ Section
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Data-description"
@@ -190,7 +188,7 @@ noprefix "false"
 
 \end_inset
 
- provides general description of the data used, Section 
+ provides general description of the data used, Section
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Optimal-model-selection"
@@ -201,7 +199,7 @@ noprefix "false"
 \end_inset
 
  describes the model fitting procedure.
- In Chapter 
+ In Chapter
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Model-application-for"
@@ -241,86 +239,83 @@ name "sec:Random-walk-with"
 The idea behind the model of a random walk with varying probability is that
  the probability distribution of the next step depends directly on the result
  of the previous step in the following manner.
- Let us have a basic random walk with steps 
+ Let us have a basic random walk with steps
 \begin_inset Formula $X\in\{-1,\,1\}$
 \end_inset
 
- with Bernouli distribution depending on a parameter 
+ with Bernouli distribution depending on a parameter
 \begin_inset Formula $p$
 \end_inset
 
- so that 
+ so that
 \begin_inset Formula $P(x=1)=p$
 \end_inset
 
- and 
+ and
 \begin_inset Formula $P(x=-1)=1-p$
 \end_inset
 
 .
  After each step this probability is altered using a memory coefficient
- 
 \begin_inset Formula $\lambda$
 \end_inset
 
  and the result of previous step.
- We can define 2 major types of random walk with varying probability - 
+ We can define 2 major types of random walk with varying probability -
 \emph on
-success punishing 
+success punishing
 \emph default
-and 
+and
 \emph on
 success rewarding
 \emph default
 .
  The first denotes that everytime an event occurs, the probability of its
  repetition decreases, i.e.
- if step 
+ if step
 \begin_inset Formula $X_{t}=1$
 \end_inset
 
- then the probability the next step being 
+ then the probability the next step being
 \begin_inset Formula $1$
 \end_inset
 
- again decreases by a parameter 
+ again decreases by a parameter
 \begin_inset Formula $\lambda$
 \end_inset
 
- so that 
+ so that
 \begin_inset Formula $p_{t+1}=\lambda p_{t}$
 \end_inset
 
 .
- For the 
+ For the
 \emph on
-success rewarding 
+success rewarding
 \emph default
 model, the oposite holds and every time an event occurs, the probability
  of its repetition increases.
- 
 \end_layout
 
 \begin_layout Standard
 The model can be further refined by using two separate parameters, one for
  each direction, i.e.
- 
 \begin_inset Formula $\lambda=[\lambda_{1},\,\lambda_{2}]$
 \end_inset
 
 .
- Again, there can be 
+ Again, there can be
 \emph on
-success punishing 
+success punishing
 \emph default
-and 
+and
 \emph on
-success rewarding 
+success rewarding
 \emph default
 model.
  Thus, together there are four basic model variants.
  Formal definitions of all four model variants and their detailed description
- together with the derivation of useful formulas can be found in 
+ together with the derivation of useful formulas can be found in
 \begin_inset ERT
 status open
 
@@ -353,7 +348,6 @@ The random walk model can be applied to model any discrete time random process.
  strokes within a point, they all can be considered discrete random processes.
  In this paper, the model of a random walk with varying probability was
  used to model the sets played within a match.
- 
 \end_layout
 
 \begin_layout Section
@@ -369,12 +363,12 @@ name "sec:Data-description"
 
 \begin_layout Standard
 For the purpose of this paper an automatic data gathering tool was created.
- This tool was continuously scraping data from 
+ This tool was continuously scraping data from
 \emph on
 www.tipsport.cz
 \emph default
 , the website of the biggest Czech bookmaker, gathering provided odds for
- the winner of the first set of each match and, if available, also the 
+ the winner of the first set of each match and, if available, also the
 \emph on
 in-play
 \emph default
@@ -385,7 +379,6 @@ in-play
  PostgreSQL database deployed on Digital Ocean infrastructure was used for
  data storage.
  For the purpose of this paper, data from February until May 2021 was available.
- 
 \end_layout
 
 \begin_layout Standard
@@ -395,16 +388,16 @@ The data was split into training and testing datasets.
  In the training dataset, there were 12 372 matches.
  Complete information, i.e.
  both odds and result, were available for 3 365 matches (mostly because
- the bookmaker did not provide 
+ the bookmaker did not provide
 \emph on
 in-play
 \emph default
  odds for the matches).
- As the matches are played as 
+ As the matches are played as
 \emph on
 best-of-three
 \emph default
- (or 
+ (or
 \emph on
 best-of-five
 \emph default
@@ -426,7 +419,7 @@ name "sec:Optimal-model-selection"
 \end_layout
 
 \begin_layout Standard
-As mentioned in Section 
+As mentioned in Section
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Random-walk-with"
@@ -437,7 +430,7 @@ noprefix "false"
 \end_inset
 
 , there are 4 basic variants of the model altogether with two (or three
- in case of 
+ in case of
 \begin_inset Formula $\lambda=[\lambda_{1},\,\lambda_{2}]$
 \end_inset
 
@@ -458,39 +451,38 @@ name "subsec:Starting-probability-selection"
 \end_layout
 
 \begin_layout Standard
-The first unknown parameter of the model is the starting probability 
+The first unknown parameter of the model is the starting probability
 \begin_inset Formula $p_{0}$
 \end_inset
 
 .
- In tennis modelling, coefficient 
+ In tennis modelling, coefficient
 \begin_inset Formula $p_{0}=p_{A}$
 \end_inset
 
  means the probability that Player A will win the first set.
- This probability (or its estimate) is implicitly given by the odds 
+ This probability (or its estimate) is implicitly given by the odds
 \begin_inset Formula $o=[o_{A},\,o_{B}]$
 \end_inset
 
  provided by bookmaker.
- Roughly, 
+ Roughly,
 \begin_inset Formula $p_{A}\widetilde{=}\frac{1}{o_{A}}$
 \end_inset
 
 .
  This estimate can be further refined.
- First, for typical odds there holds that 
+ First, for typical odds there holds that
 \begin_inset Formula $\frac{1}{o_{A}}+\frac{1}{o_{B}}>1$
 \end_inset
 
- (i.e., typically the bookmaker provides 
+ (i.e., typically the bookmaker provides
 \emph on
-subfair 
+subfair
 \emph default
 odds with bookmaker's winning margin).
  First step is thus the normalization of odds.
  It turns out that the simple normalization, i.e.
- 
 \begin_inset Formula $p_{A}=n_{1}(o)=\frac{\frac{1}{o_{A}}}{\frac{1}{o_{A}}+\frac{1}{o_{B}}}$
 \end_inset
 
@@ -498,48 +490,46 @@ odds with bookmaker's winning margin).
  In fact, bookmakers margin is usually unevently distributed towards the
  outsider.
  Therefore, an alternative normalization function can be used:
-\begin_inset Formula 
-\[
-p_{A}=n_{2}(o)=\frac{1}{o_{A}}+\frac{o_{A}o_{B}-o_{A}-o_{B}}{o_{B}(o_{A}+o_{B})}.
-\]
+\begin_inset Formula
+\begin{equation}
+p_{A}=n_{2}(o)=\frac{1}{o_{A}}+\frac{o_{A}o_{B}-o_{A}-o_{B}}{o_{B}(o_{A}+o_{B})}.\label{eq:n2_normalization}
+\end{equation}
 
 \end_inset
 
 This can be further improved by introducing a third normalization function
- 
 \begin_inset Formula $N(o,t)$
 \end_inset
 
-, with a real parameter 
+, with a real parameter
 \begin_inset Formula $t$
 \end_inset
 
- linearly extrapolating 
+ linearly extrapolating
 \begin_inset Formula $n_{1}$
 \end_inset
 
- and 
+ and
 \begin_inset Formula $n_{2}$
 \end_inset
 
- such that 
+ such that
 \begin_inset Formula $\mu(o,0)=n_{2}(o)$
 \end_inset
 
- and 
+ and
 \begin_inset Formula $\mu(o,2)=n_{1}(o)$
 \end_inset
 
 .
- 
 \end_layout
 
 \begin_layout Standard
-To obtain reasonable estimation of the model parameter 
+To obtain reasonable estimation of the model parameter
 \begin_inset Formula $p_{0}$
 \end_inset
 
- from provided odds, the first step is to estimate parameter 
+ from provided odds, the first step is to estimate parameter
 \begin_inset Formula $t$
 \end_inset
 
@@ -548,75 +538,74 @@ To obtain reasonable estimation of the model parameter
  set.
  Bookmaker's odds for the first set and the actual result of the first set
  were used.
- The likelihood function is defined as 
-\begin_inset Formula 
+ The likelihood function is defined as
+\begin_inset Formula
 \[
 L=\prod_{i=1}^{N}(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)),
 \]
 
 \end_inset
 
-where 
+where
 \begin_inset Formula $N$
 \end_inset
 
- is the number of matches in the training dataset, 
+ is the number of matches in the training dataset,
 \begin_inset Formula $o_{i}$
 \end_inset
 
- is the bookmaker's odds for the first set in the 
+ is the bookmaker's odds for the first set in the
 \begin_inset Formula $i-th$
 \end_inset
 
- match and 
+ match and
 \begin_inset Formula $x_{i}$
 \end_inset
 
- is the result of the first set in the 
+ is the result of the first set in the
 \begin_inset Formula $i-th$
 \end_inset
 
- match, 
+ match,
 \begin_inset Formula $x_{i}=1$
 \end_inset
 
- if Player A won the set, 
+ if Player A won the set,
 \begin_inset Formula $x_{i}=0$
 \end_inset
 
  otherwise.
- For computational reasons the 
+ For computational reasons the
 \emph on
-log-likelihood 
+log-likelihood
 \emph default
 
 \begin_inset Formula $L_{l}=log(L)$
 \end_inset
 
  was used, i.e.
- the function 
-\begin_inset Formula 
+ the function
+\begin_inset Formula
 \[
-L_{l}=\sum_{i=1}^{N}log(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)).
+L_{l}=\sum_{i=1}^{N}ln(x_{i}\mu(o_{i},\,t)+(1-x_{i})(1-\mu(o_{i},\,t)).
 \]
 
 \end_inset
 
-Numerical methods, namely the function 
+Numerical methods, namely the function
 \emph on
 minimize_scalar
 \emph default
  from the Python SciPy package, were used to obtain optimal value of parameter
- 
 \begin_inset Formula $t=4.03e-06$
 \end_inset
 
 .
- We can thus consider 
+ We can thus consider
 \begin_inset Formula $t=0$
 \end_inset
 
- and use function 
+ and use function
 \begin_inset Formula $n_{2}$
 \end_inset
 
@@ -637,45 +626,108 @@ name "subsec:Model-selection"
 \begin_layout Standard
 For each match with data for at least 2 sets available (i.e.
  with at least 1 prediction opportunity), the first set winning probability
- 
 \begin_inset Formula $p_{0}$
 \end_inset
 
  was derived using the procedure and parameter from previous paragraph.
  Then, for each of the four model variants the optimal value of coefficient
- 
 \begin_inset Formula $\lambda$
 \end_inset
 
- was found again using the maximum log-likelihood estimate.
- Finally, the Akaike Information Criterion 
+ was found again using the maximum (log) likelihood estimate
+\begin_inset Formula
+\[
+L=\sum_{i=1}^{N}\sum_{j=1}^{N_{i}}x_{ij}p_{ij}+(1-x_{ij})(1-p_{ij}),
+\]
+
+\end_inset
+
+where
+\begin_inset Formula $N$
+\end_inset
+
+ denotes the number of matches in testing dataset,
+\begin_inset Formula $N_{i}$
+\end_inset
+
+ the number of predictable sets in
+\begin_inset Formula $i-th$
+\end_inset
+
+ match,
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+ is the result of the
+\begin_inset Formula $j-th$
+\end_inset
+
+ set in the
+\begin_inset Formula $i-th$
+\end_inset
+
+ match,
+\begin_inset Formula $x_{ij}=1$
+\end_inset
+
+ if Player A won the set,
+\begin_inset Formula $x_{ij}=0$
+\end_inset
+
+ and
+\begin_inset Formula $p_{ij}$
+\end_inset
+
+ is the probability of Player A winning the set computed using the currently
+ considered model variant.
+\end_layout
+
+\begin_layout Standard
+ Finally, the Akaike Information Criterion
 \begin_inset Formula $AIC=2k-2ln(L)$
 \end_inset
 
-, which helps to correctly identify models with smaller number of parameters,
+, which considers the number of parameters to correctly the best model,
  was used.
- Here 
+ Here
 \begin_inset Formula $k$
 \end_inset
 
- is the number of model parameters and 
+ is the number of model parameters and
 \begin_inset Formula $L$
 \end_inset
 
  is the maximal likelihood.
- This produces 
-\emph on
-succes rewarded with single lambda 
-\emph default
-as the optimal model, with 
-\begin_inset Formula $\lambda=0.826$
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Standard
-varianty pro skupiny zapasu
+Based on the available traning data the
+\emph on
+single lambda succes rewarding
+\emph default
+model variant was selected, with
+\begin_inset Formula $\lambda=0.826$
+\end_inset
+
+ and
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ computed for each match using the
+\begin_inset Formula $n_{2}$
+\end_inset
+
+ normalization function defined in
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:n2_normalization"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -691,12 +743,8 @@ name "sec:Model-application-for"
 
 \begin_layout Standard
 To test the quality of the model, following experiment was performed.
- The testing dataset consisted of matches played between May 1st 2021 and
- May 20th 2021.
- There were XXX matches with complete data available, i.e.
- results of all sets played and bookmakers odds for that sets.
  For each match in the dataset, first the starting probability was derived
- using the procedure described in 
+ using the procedure described in Section
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "subsec:Starting-probability-selection"
@@ -708,15 +756,15 @@ noprefix "false"
 
 .
  Then, it was iterated over the sets played, and for each set, the set winning
- probability was computed using the 
+ probability was computed using the
 \emph on
-success rewarding 
+success rewarding
 \emph default
-model and memory parameter 
+model and memory parameter
 \begin_inset Formula $\lambda=0.826$
 \end_inset
 
- as specified in 
+ as specified in Section
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "subsec:Model-selection"
@@ -727,10 +775,11 @@ noprefix "false"
 \end_inset
 
 .
- Every time the odd provided by the bookmaker was high enough, a virtual
- bet was made.
- 
-\lang british
+ This probability was compared to odds provided by the bookmaker and possibly
+ a virtual bet was made.
+\end_layout
+
+\begin_layout Standard
 Choosing the correct betting strategy is one of the key elements of successful
  betting.
  It depends on the underlying model, available bookmaker's odds, bankroll,
@@ -738,20 +787,24 @@ Choosing the correct betting strategy is one of the key elements of successful
  There exists a large number of possible approaches and the detailed description
  of them is beyond the scope of this paper.
  For testing purposes, there were three basic strategies tested.
- First, the naive betting strategy, where simpy 1 unit was bet every time.
- Then, the probability base strategy, where 
+ First, the naive betting strategy, where simpy
+\begin_inset Formula $1$
+\end_inset
+
+ unit was bet every time.
+ Then, the probability base strategy, where
 \begin_inset Formula $p$
 \end_inset
 
  (probability of winning) units was bet.
- Finally the odds based strategy, where 
+ Finally the odds based strategy, where
 \begin_inset Formula $\frac{1}{odds}$
 \end_inset
 
  was bet.
  The strategies differ in the expected wins and their variance.
  The theoretical properties of the betting strategies can be observed in
- Table 
+ Table
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:strategies"
@@ -761,12 +814,12 @@ noprefix "false"
 
 \end_inset
 
- with the special case where 
+ with the special case where
 \begin_inset Formula $p=\frac{1}{a}$
 \end_inset
 
 , i.e.
- in case of fair odds 
+ in case of fair odds
 \begin_inset ERT
 status open
 
@@ -780,37 +833,59 @@ cite{ja2015ddny}
 \end_inset
 
 .
- besides the different betting amount strategies, it is also important to
+ Besides the different betting amount strategies, it is also important to
  choose when to bet.
- The basic strategy is to bet always when 
+ The basic strategy is to bet always when
 \begin_inset Formula $p>\frac{1}{odds}$
 \end_inset
 
 .
  It turns out that it is more favourable to bet only when there is a margin
  present, i.e.
- when 
+ when
 \begin_inset Formula $p>\frac{1}{odds}\cdot m$
 \end_inset
 
-, where 
+, where
 \begin_inset Formula $m$
 \end_inset
 
- is a margin parameter, 
+ is a margin parameter,
 \begin_inset Formula $m>1.$
 \end_inset
 
- For 
+
+\end_layout
+
+\begin_layout Standard
+ For
 \begin_inset Formula $m=1.2$
 \end_inset
 
 , i.e.
- 20% margin, there are 58 virtual bets made and a significant profit can
- be achieved.
- In terms of return of investment, the naive betting yields profit 123%,
- probability based betting 86% and odds based betting 100% profit.
- The development of the portfolio balance can be seen in Figure 
+\begin_inset Formula $20\%$
+\end_inset
+
+ margin, there are 65 virtual bets made and a significant profit is achieved.
+ One of the parameters to evaluate a quality of a betting strategy is the
+ return of investment (ROI), i.e.
+\begin_inset Formula $\frac{total\,profit}{total\,bankroll\,needed}.$
+\end_inset
+
+ For this parameter, the naive betting yields
+\begin_inset Formula $ROI=148\%$
+\end_inset
+
+, probability based betting
+\begin_inset Formula $ROI=98\%$
+\end_inset
+
+ and odds based betting
+\begin_inset Formula $ROI=111\%$
+\end_inset
+
+.
+ The development of the portfolio balance can be seen in Figure
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:A-graph-showing"
@@ -824,8 +899,6 @@ noprefix "false"
 \end_layout
 
 \begin_layout Standard
-
-\lang british
 \begin_inset Float table
 wide false
 sideways false
@@ -833,8 +906,6 @@ status open
 
 \begin_layout Plain Layout
 \align center
-
-\lang british
 \begin_inset Tabular
 <lyxtabular version="3" rows="5" columns="6">
 <features tabularvalignment="middle">
@@ -849,8 +920,6 @@ status open
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 Strategy
 \end_layout
 
@@ -860,8 +929,6 @@ Strategy
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 Bet
 \end_layout
 
@@ -871,8 +938,6 @@ Bet
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $E(w)$
 \end_inset
 
@@ -885,8 +950,6 @@ Bet
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $E(w|p=\frac{1}{a})$
 \end_inset
 
@@ -899,8 +962,6 @@ Bet
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $Var(w)$
 \end_inset
 
@@ -913,8 +974,6 @@ Bet
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $Var(w|p=\frac{1}{a})$
 \end_inset
 
@@ -929,8 +988,6 @@ Bet
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 Naive
 \end_layout
 
@@ -940,8 +997,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $1$
 \end_inset
 
@@ -954,8 +1009,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $pa-1$
 \end_inset
 
@@ -968,8 +1021,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $0$
 \end_inset
 
@@ -982,8 +1033,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $pa^{2}(1-p)$
 \end_inset
 
@@ -996,8 +1045,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $a(1-\frac{1}{a}$
 \end_inset
 
@@ -1012,8 +1059,6 @@ Naive
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 Odds
 \end_layout
 
@@ -1023,8 +1068,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $\frac{1}{a}$
 \end_inset
 
@@ -1037,8 +1080,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $p-\frac{1}{a}$
 \end_inset
 
@@ -1051,8 +1092,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $0$
 \end_inset
 
@@ -1065,8 +1104,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $p(1-p)$
 \end_inset
 
@@ -1079,8 +1116,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $\frac{1-\frac{1}{k}}{k}$
 \end_inset
 
@@ -1095,8 +1130,6 @@ Odds
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 Prob.
 \end_layout
 
@@ -1106,8 +1139,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $p$
 \end_inset
 
@@ -1120,8 +1151,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $p(pa-1)$
 \end_inset
 
@@ -1134,8 +1163,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $0$
 \end_inset
 
@@ -1148,8 +1175,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $p^{3}a^{2}(1-p)$
 \end_inset
 
@@ -1162,8 +1187,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $\frac{1-\frac{1}{k}}{k}$
 \end_inset
 
@@ -1178,8 +1201,6 @@ Prob.
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 General
 \end_layout
 
@@ -1189,8 +1210,6 @@ General
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $u$
 \end_inset
 
@@ -1203,8 +1222,6 @@ General
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $u(pa-1)$
 \end_inset
 
@@ -1217,8 +1234,6 @@ General
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $0$
 \end_inset
 
@@ -1231,8 +1246,6 @@ General
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $u^{2}pa^{2}(1-p)$
 \end_inset
 
@@ -1245,8 +1258,6 @@ General
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Formula $u^{2}a(1-\frac{1}{a})$
 \end_inset
 
@@ -1264,13 +1275,9 @@ General
 \end_layout
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset CommandInset label
 LatexCommand label
 name "tab:strategies"
@@ -1278,11 +1285,10 @@ name "tab:strategies"
 \end_inset
 
 Theoretical values of wins and variances for different betting strategies.
- 
 \begin_inset Formula $p$
 \end_inset
 
- is the probability of winning, 
+ is the probability of winning,
 \begin_inset Formula $a$
 \end_inset
 
@@ -1300,16 +1306,12 @@ Theoretical values of wins and variances for different betting strategies.
 \end_layout
 
 \begin_layout Standard
-
-\lang british
 \begin_inset Float figure
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset Graphics
 	filename ../account_balance_development.pdf
 	width 100text%
@@ -1320,8 +1322,6 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-
-\lang british
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:A-graph-showing"
@@ -1360,14 +1360,13 @@ In this paper, a recently introduced model of a random walk with varying
  modelling.
  To better validate the model quality a larger dataset has to be aquired.
  The model can be further improved, for example by introducing a variable
- memory coefficient 
+ memory coefficient
 \begin_inset Formula $\lambda$
 \end_inset
 
  or by combining the model with some of the more clasical, regression based
  approaches.
  This will be subject of a further research.
- 
 \end_layout
 
 \begin_layout Section
