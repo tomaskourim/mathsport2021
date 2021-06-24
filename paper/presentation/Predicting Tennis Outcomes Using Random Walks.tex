@@ -1,0 +1,293 @@
+\documentclass[american]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{babel}
+\usepackage{amsmath}
+
+\usetheme{Berlin}
+\usecolortheme{whale}
+
+
+\title{Random Walk with Varying Transition Probabilities Applied on Tennis Modelling}
+\subtitle{Mathsport International 8 - 2021}
+\institute[Tomáš Kouřim (tom@skourim.com)]{\inst{} Faculty of Nuclear Sciences and Physical Engineering, CTU Prague \and
+    \inst{} Institute of Information Theory and Automation, CAS CR Prague}
+\date{25.6.2021}
+\author[\selectlanguage{czech}%
+Tomáš Kouřim\selectlanguage{czech}%
+]{Tomáš~Kouřim \and }
+\newcommand{\nologo}{\setbeamertemplate{logo}{}} % command to set the logo to nothing
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[square]
+\setbeamercovered{transparent}
+%\logo{\includegraphics[height=1.3cm]{../CMSIM_Logo.pdf}}
+
+\begin{document}
+    \maketitle
+
+    \section{Motivation}\label{sec:motivation}
+
+    \begin{frame}{Random walk}
+        \begin{definition}
+            A man starts from a point $O$ and walks $l$ yards in a straight line;
+            he then turns through any angle whatever and walks another $l$
+            yards in a second straight line.
+            He repeats this process $n$ times.
+            I require the probability that after these $n$ stretches he is at
+            a distance between $r$ and $r+\delta r$ from his starting point, $O$.
+
+            {\footnotesize{}\medskip{}\emph{[Karl Pearson: The problem of the random walk.(1905)]}}
+
+            \vspace{10mm}
+            \begin{itemize}
+                \item[]<2-> \large{Where is the \emph{drunken sailor}?}
+            \end{itemize}
+        \end{definition}
+    \end{frame}
+
+    \begin{frame}{Motivation - Random process with varying probability}
+        \includegraphics[width=1\textwidth]{../../simulations/probability_25_steps_type_success_punished_two_lambdas}
+    \end{frame}
+
+    \begin{frame}{Motivation}
+        \begin{itemize}
+            \item Failure of a machine
+            \begin{itemize}
+                \item repair after failure
+                \item preventive maintenance
+            \end{itemize}
+            \item<2-> Occurrence of a disease
+            \begin{itemize}
+                \item cure of the disease
+                \item prevention (i.e. lifestyle change)
+            \end{itemize}
+            \item<3-> Development of sports match
+            \begin{itemize}
+                \item goal scored, point achieved
+                \item period won
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Motivation - Random process with varying probability}
+        \includegraphics[width=1\textwidth]{../../simulations/probability_dots_25_steps_type_success_punished_two_lambdas}
+    \end{frame}
+
+    \section{Model description}\label{sec:model-description}
+    \begin{frame}{Random walk with varying probabilities}
+        \begin{itemize}
+            \item<1-> Random walk with memory based the on standard Bernoulli random walk
+            \item<2-> Given starting probability $p_0$
+            \item<3-> $X_t\in\{-1,1\}$ with $X_t \sim {\textrm{Bernoulli} }(p_{t-1})$
+            \item<4-> Memory coefficient $\lambda\in(0,\,1)$ affecting the development of probabilities $p_{t}$ as
+            \onslide<4->\begin{flalign*}
+                            X_{t} & =1\rightarrow p_{t}=\lambda p_{t-1} &
+                            X_{t} & =-1\rightarrow p_{t}=1-\lambda(1-p_{t-1}) &
+            \end{flalign*}
+            \vspace{-5mm}
+            \begin{itemize}
+                \item[-->]<5-> ``Success punishing''
+            \end{itemize}
+            \onslide<6->\begin{flalign*}
+                            X_{t}&=1\rightarrow p_{t}=1-\lambda(1-p_{t-1})&
+                            X_{t}&=-1\rightarrow p_{t}=\lambda p_{t-1}&
+            \end{flalign*}
+            \vspace{-5mm}
+            \begin{itemize}
+                \item[-->]<6-> ``Success rewarding''
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Example - RW development}
+        \includegraphics[width=1\textwidth]{../../simulations/single_walk_1000_steps_type_success_punished}
+    \end{frame}
+
+    \begin{frame}{Example - RW development}
+        \includegraphics[width=1\textwidth]{../../simulations/single_walk_1000_steps_type_success_punished_p0_0.55}
+    \end{frame}
+
+    \begin{frame}{Walk steps properties}
+
+        \begin{flalign*}
+            EX_{t} & =(2\lambda-1)^{t-1}(2p_{0}-1)&
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}EX_{t}&=0&
+        \end{flalign*}
+        \onslide<2->
+        \begin{flalign*}
+            Var\,X_{t}&=1-(2\lambda-1)^{2(t-1)}(2p_{0}-1)^{2}&
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}Var\,X_{t}&=1&
+        \end{flalign*}
+
+    \end{frame}
+
+    \begin{frame}{Example - RW steps}
+        \includegraphics[width=1\textwidth]{../../simulations/e_step_1000_walks_50_steps_type_success_punished}
+    \end{frame}
+
+    \begin{frame}{Walk probabilities properties}
+        \begin{flalign*}
+            EP_{t} & =(2\lambda-1)^{t}p_{0}+\frac{1-(2\lambda-1)^{t}}{2} &
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}EP_{t} & =\frac{1}{2} &
+        \end{flalign*}
+        \onslide<2->
+        \begin{flalign*}
+            Var\,P_{t} & =(3\lambda^{2}-2\lambda)^{t}p_{0}^{2}+\sum_{i=0}^{t-1}K(i;p_{0},\lambda)(3\lambda^{2}-2\lambda)^{t-1-i}-k(t;p_{o},\lambda)^{2} &
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}Var\,P_{t} & =\frac{\frac{1}{2}(1-\lambda^{2})}{-3\lambda^{2}+2\lambda+1}-\frac{1}{4} &
+        \end{flalign*}
+    \end{frame}
+
+    \begin{frame}{Example - RW probabilities}
+        \includegraphics[width=1\textwidth]{../../simulations/e_probability_1000_walks_50_steps_type_success_punished}
+    \end{frame}
+
+    \begin{frame}{Walk position properties}
+        \begin{flalign*}
+            ES_{t} & =S_{0}+(2p_{0}-1)\frac{1-(2\lambda-1)^{t}}{2(1-\lambda)} &
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}ES_{t} & =S_{0}+\frac{(2p_{0}-1)}{2(1-\lambda)} &
+        \end{flalign*}
+        \onslide<2->
+        \begin{flalign*}
+            Var\,S_{t} & =t+4\sum_{i=0}^{t-1}\sigma(i;p_{0},0,\lambda)-a(t;p_{0},\lambda) &
+        \end{flalign*}
+        \vspace{-5mm}
+        \begin{flalign*}
+            \lim_{t\to+\infty}Var\,S_{t} & =c_{1}(p_{0},\lambda)t+c_{2}(p_{0},\lambda) &
+        \end{flalign*}
+    \end{frame}
+
+    \begin{frame}{Example - RW position}
+        \includegraphics[width=1\textwidth]{../../simulations/e_position_1000_walks_50_steps_type_success_punished}
+    \end{frame}
+
+    \begin{frame}{Success rewarding model}
+        \onslide<2->
+        \begin{flalign*}
+            EX_{t} & =2p_{0}-1 &
+        \end{flalign*}
+        \vspace{-8mm}
+        \begin{flalign*}
+            Var\,X_{t} & =4p_{0}(1-p_{0}) &
+        \end{flalign*}
+        \onslide<1->
+        \begin{flalign*}
+            EP_{t} & =p_{0} &
+        \end{flalign*}
+        \vspace{-8mm}
+        \onslide<2->
+        \begin{flalign*}
+            Var\,P_{t} & =(2\lambda-\lambda^{2})^{t}p_{0}^{2}+p_{0}(1-\lambda)^{2}\sum_{i=0}^{t-1}(2\lambda-\lambda^{2})^{i}-p_{0}^{2} &
+        \end{flalign*}
+        \begin{flalign*}
+            ES_{t} & =S_{0}+t(2p_{0}-1) &
+        \end{flalign*}
+        \vspace{-8mm}
+        \begin{flalign*}
+            Var\,S_{t} & =4p_{0}(1-p_{0})t^{2}+a(p_{0},\lambda)t-a(p_{0},\lambda)\frac{1-(2\lambda-\lambda^{2})^{t}}{(1-\lambda)^{2}} &
+        \end{flalign*}
+    \end{frame}
+
+    \begin{frame}{More complex models}
+        \begin{itemize}
+            \item Two memory coefficients $\lambda$ each affecting one direction of the walk
+            \item Again two variants -- success punishing and success rewarding
+            \onslide<2->\begin{flalign*}
+                            X_{t-1} & =1\rightarrow p_{t}=\lambda_{0} p_{t-1} &
+                            X_{t-1} & =-1\rightarrow p_{t}=1-\lambda_{1}(1-p_{t-1}) &
+            \end{flalign*}
+            \vspace{-5mm}
+            \begin{itemize}
+                \item[-->]<2-> ``Two-parameter success punishing model''
+            \end{itemize}
+            \onslide<3->\begin{flalign*}
+                            X_{t-1}&=1\rightarrow p_{t}=1-\lambda_{0}(1-p_{t-1})&
+                            X_{t-1}&=-1\rightarrow p_{t}=\lambda_{1} p_{t-1}&
+            \end{flalign*}
+            \vspace{-5mm}
+            \begin{itemize}
+                \item[-->]<3-> ``Two-parameter success rewarding model''
+            \end{itemize}
+            \item<4-> $M$ steps, $\lambda(t)$, $n$-dimensional walk
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Model application}\label{sec:model-application}
+
+    \begin{frame}{Model fitting}
+        \begin{enumerate}
+            \item Find $p_{0}$
+            \item<2-> Find $\lambda$ parameter(s)
+            \item<3-> Choose optimal model type
+            \begin{itemize}
+                \item <4-> Akaike Information Criterion (AIC) \& numerical optimization
+            \end{itemize}
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}{Real life application}
+        \begin{itemize}
+            \item Results of tennis matches from February till May 2021 together with real life odds (both \emph{pre-match} and \emph{in-play}) provided by a bookmaker
+	        \item Data divided into training (February - April) and testing (May) datasets
+            \item $p_{0}$ estimated using the first set winning odds provided by the bookmaker
+            \item ``Single lambda success rewarding'' model selected as best fit using AIC and training data
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Real life application}
+        \begin{itemize}
+            \item Simulated in-play betting on set winner
+            \begin{itemize}
+                \item<2-> Bet if $p\geq {1.2}\frac{1}{odds}$
+                \item<3-> Three betting strategies tested
+                \item<4-> ROI 98-148\% within just one month of betting
+                \item<5-> Only 65 bets placed
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Example - RW position}
+        \includegraphics[width=1\textwidth]{../../simulations/account_balance_development}
+    \end{frame}
+
+    \begin{frame}{Summary}
+        \begin{itemize}
+            \item A specific model of a random walk with memory
+            \item Model properties derived
+            \item Possible applications in a set of real life scenarios
+            \item Initial results show big potential of the model
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[plain]
+        \begin{quote}
+            \begin{center}
+                \huge{Thank you.}
+            \end{center}
+            \vspace{10mm}
+            \begin{center}
+                \large{tom@skourim.com}
+            \end{center}
+        \end{quote}
+    \end{frame}
+
+\end{document}
